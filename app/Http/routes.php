@@ -15,4 +15,8 @@ Route::get('/', 'Back@index');
 
 Route::post('/loader','Back@store');
 
+Route::get('/loader/{google_id}','Back@get_item');
 Route::post('/loader/{google_id}','Back@store_item');
+
+Route::post('/visited','Back@visited');
+

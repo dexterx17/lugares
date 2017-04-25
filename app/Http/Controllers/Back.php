@@ -71,11 +71,27 @@ class Back extends Controller
 	    $lugar->vecinity = $request->vecinity;
 	    $lugar->telefono = $request->telefono;
 	    $lugar->web = $request->web;
+	    $lugar->loaded = true;
 	    
 	    if($lugar->save()){
 	    	$lugar->categorias()->sync($categorias);
 	        return response()->json($lugar);
 	    }
 	    return response()->json(['lugar_store_error']);
+	}
+
+	public function get_item($google_id){
+		$lugar = Lugar::where('google_id',$google_id)->first();
+		$lugar->cats = $lugar->categorias->lists('categoria');
+		$lugar->visited=false;
+		return response()->json($lugar);
+	}
+
+	public function visited(Request $request){
+		$google_id  = $request->place_id;
+		$user_id  = $request->user_id;
+		$lugar = Lugar::where('google_id',$google_id)->first();
+		$lugar->user()->sync([$user_id]);
+		return response()->json($lugar);
 	}
 }

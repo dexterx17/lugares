@@ -29,6 +29,6 @@ class User extends Authenticatable
      * @return App\Lugar Objeto de tipo Lugar
      */
     public function lugares(){
-        return $this->hasMany('App\Lugar');
+        return $this->belongsToMany('App\Lugar');
     }
 }

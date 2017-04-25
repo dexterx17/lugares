@@ -9,7 +9,7 @@ class Lugar extends Model
     protected $table = 'lugares';
 
     protected $fillable = [
-        'name', 'direccion', 'telefono','web','google_id','lat','lng'
+        'name', 'direccion', 'telefono','web','google_id','lat','lng','loaded'
     ];
 
     /**
@@ -27,7 +27,16 @@ class Lugar extends Model
      */
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsToMany('App\User');
     }
 
+    public function scopeVisited($query,$user_id){
+        $lugar_id = $this->id;
+        return $query->whereIn('id',function($sq) use ($user_id,$lugar_id){
+            $sq->select('lugar_id');
+            $sq->from('lugar_user');
+            $sq->where('user_id',$user_id);
+            $sq->where('lugar_id',$lugar_id);
+        });
+    }
 }

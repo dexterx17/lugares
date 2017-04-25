@@ -94,7 +94,7 @@
                         <div id="tabs">
                           <!-- Nav tabs -->
                           <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#lugares" aria-controls="lugares" role="tab" data-toggle="tab">Lugares</a></li>
+                            <li role="presentation" class="active"><a href="#lugares" aria-controls="lugares" role="tab" data-toggle="tab">Lugares <span id="n_lugares" class="badge">{{ count($items) }}</span></a></li>
                             <li role="presentation"><a href="#detail" aria-controls="detail" role="tab" data-toggle="tab">Detalles</a></li>
                            </ul>
 
@@ -102,10 +102,10 @@
                           <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="lugares">
                             @foreach($items as $key=>$item)
-                                <div class="media">
+                                <div class="media @if($item->visited(1)->count()) bg-success @endif" id="{{ $item->google_id }}">
                                     <div class="media-left">
-                                        <a href="{{ $item->google_id }}">
-                                            <img alt="{{ $item->name }}" class="media-object" src="{{ $item->categorias()->first()->icono_url }}"/>
+                                        <a href="{{ $item->google_id }}" class="@if($item->loaded) local @endif">
+                                            <img alt="{{ $item->name }}" class="media-object" width="50" height="50" src="@if($item->imagen!="") {{ $item->imagen }} @else {{ $item->categorias()->first()->icono_url }} @endif"/>
                                         </a>
                                     </div>
                                     <div class="media-body">
@@ -119,6 +119,30 @@
                             </div>
                             <div role="tabpanel" class="tab-pane" id="detail">
                                 Selecciona un <button  id="btn_lugares" title="Lugar">lugar</button>
+                                <!--<div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3>
+                                            Titi Park
+                                            <button type="button" place="" class="visitado pull-right btn btn-info">Visitado</button>
+                                        </h3>
+                                    </div>
+                                    <div class="panel-body">
+                                    <img class="img-responsive" src="https://lh4.googleusercontent.com/-6YHtST5k04w/WPI35S-cPqI/AAAAAAAAABE/Nk0oJtFflF8P6DlM_jAsswpIs6qfjM-zQCLIB/w200-h250-k/">
+                                        <ul class="list-group">
+                                            <li class="list-group-item"><i class="glyphicon glyphicon-home"></i> Huayna Capac, Ambato 180202, Ecuador</li>
+                                            <li class="list-group-item"><i class="glyphicon glyphicon-earphone"></i> null</li>
+                                            <li class="list-group-item"><i class="glyphicon glyphicon-globe"></i> <a href="undefined">website</a></li>
+                                            <li class="list-group-item">Categorias: 
+                                                <ul>
+                                                    <li><a href="#">amusement_park</a></li>
+                                                    <li><a href="#">establishment</a></li>
+                                                    <li><a href="#">point_of_interest</a></li>
+                                                </ul>
+                                            </li>
+                                        </ul
+                                        ><hr>
+                                    </div>
+                                </div>-->
                             </div>
 
                           </div>
@@ -157,8 +181,47 @@
 
         $('.media a').on('click',function(e){
             e.preventDefault();
-            detail_info($(this).attr('href'));
+            if($(this).hasClass('local')){
+                get_info($(this).attr('href'));
+            }else{
+                detail_info($(this).attr('href'));
+            }
         });
+        $('button.visitado').on('click',function(e){
+            e.preventDefault();
+            var res = confirm('Conoces este lugar?');
+            if(res){
+                mark_place($(this).attr('place'));
+            }else{
+                alert('viaja mas');
+            }
+        });
+
+        function mark_place(place_id){
+            $.post('{{ url("visited") }}',{'place_id':place_id,'user_id':1,_token: '{{ Session::token() }}'},function(response){
+                console.log(response);
+            });
+        }
+
+        function get_info(place_id){
+            $.get('{{ url("loader") }}/'+place_id,function(response){
+                console.log('response');
+                console.log(response);
+                $('#tabs a[href="#detail"]').tab('show');
+                var categorias =[];
+                var el = build_detail_from_server(response);
+                $('#detail').html(el);
+                $('button.visitado').on('click',function(e){
+                    e.preventDefault();
+                    var res = confirm('Conoces este lugar?');
+                    if(res){
+                        mark_place($(this).attr('place'));
+                    }else{
+                        alert('viaja mas');
+                    }
+                });
+            },'json');
+        }
 
         var map;
         var infoWindow
@@ -205,6 +268,31 @@
 
         }
 
+
+        function build_detail_from_server(place){
+            var el = '<div class="panel';
+            el += '"><div class="panel-heading"><h3>'+place.name;
+            el += '<button type="button" place="'+place.google_id+'" class="visitado pull-right btn btn-info">Visitado</button>';
+            el +='</h3></div><div class="panel-body">';
+            if(typeof place.imagen!== "undefined")
+                el += '<img class="img-responsive" src="'+place.imagen+'">';
+            el += '<ul class="list-group">';
+            el += '<li class="list-group-item"><i class="glyphicon glyphicon-home"></i> '+place.direccion+'</li>';
+            if (typeof place.telefono !== 'undefined' )
+                el += '<li class="list-group-item"><i class="glyphicon glyphicon-earphone"></i> '+place.telefono+'</li>';
+            el += '<li class="list-group-item"><i class="glyphicon glyphicon-globe"></i> <a href="'+place.website+'">website</a></li>';
+            el += '<li class="list-group-item">Categorias: ';
+                el += '<ul >';
+                for (var i = 0; i < place.cats.length; i++) {
+                    el += '<li><a href="#" >'+place.cats[i]+'</a></li>';
+                };
+                el += '</ul>';
+            el += '</li>';
+            el += '</ul><hr>';
+            el += '</div></div>';
+            return el;
+        }
+
         function detail_info(place_id){
             //'ChIJN1t_tDeuEmsRUsoyG83frY4'
             var request = {
@@ -215,14 +303,12 @@
             service.getDetails(request, callback);
 
             function callback(place, status) {
-                console.log('place:');
-                console.log(place);
-                console.log('status:');
-                console.log(status);
               if (status == google.maps.places.PlacesServiceStatus.OK) {
                 $('#tabs a[href="#detail"]').tab('show');
                 var categorias =[];
-                var el = '<div class="panel"><div class="panel-heading"><h3>'+place.name+'</h4></div><div class="panel-body">';
+                var el = '<div class="panel"><div class="panel-heading"><h3>';
+                el += '<button type="button" place="'+place.place_id+'" class="visitado pull-right btn btn-info">Visitado</button>';
+                el += place.name+'</h3></div><div class="panel-body">';
                 if(typeof place.photos!== "undefined")
                     el += '<img class="img-responsive" src="'+place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 250})+'">';
                 el += '<ul class="list-group">';
@@ -244,8 +330,10 @@
                 el += '</div></div>';
                 $('#detail').html(el);
                 var img='';
-                 if(typeof place.photos!== "undefined")
+                 if(typeof place.photos!== "undefined"){
                     img = place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 250});
+                    console.log('img: '+img);
+                 }
                     $.post('{{ url("loader") }}/'+place.place_id,{
                         name : place.name,
                         place_id : place.place_id,
@@ -258,6 +346,15 @@
                         _token: '{{ Session::token() }}'
                     },function(response){
                         console.log(response);
+                    });
+                    $('button.visitado').on('click',function(e){
+                        e.preventDefault();
+                        var res = confirm('Conoces este lugar?');
+                        if(res){
+                            mark_place($(this).attr('place'));
+                        }else{
+                            alert('viaja mas');
+                        }
                     });
               }
             }
@@ -283,11 +380,6 @@
                     'name':results[i].name,
                 });
                 console.log('-------------------------------------------------------');
-                /*var item = $('div');
-                item.addClass('media');
-                item.on('click',function(e){
-                    alert('click');
-                });*/
                 var item = '<div class="media"><div class="media-left"><a href="'+results[i]['place_id'];
                  if(typeof results[i].photos !== "undefined"){
                     item += '"><img class="media-object" src="'+results[i].photos[0].getUrl({'maxWidth': 50, 'maxHeight': 50});
@@ -316,7 +408,11 @@
               }
                 $('.media a').on('click',function(e){
                     e.preventDefault();
-                    detail_info($(this).attr('href'));
+                    if($(this).hasClass('local')){
+
+                    }else{
+                        detail_info($(this).attr('href'));
+                    }
                 });
             }
         }
