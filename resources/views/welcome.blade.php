@@ -32,6 +32,7 @@
 </head>
 <body>
     <div class="container">
+        <div id="fb-root"></div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 Pruebas de libreria places API Google maps

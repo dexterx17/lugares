@@ -1,0 +1,6 @@
+CREATE TABLE category ( ID INTEGER PRIMARY KEY AUTOINCREMENT ,category TEXT NOT NULL, description TEXT NOT NULL, image TEXT, orden INTEGER DEFAULT 1, deleted INTEGER DEFAULT 0)
+INSERT INTO category(category,description) VALUES('LUGARES','Sitios de interes y lugares turisticos');
+INSERT INTO category(category,description) VALUES('PERSONAJES','Personajes ilustres');
+INSERT INTO category(category,description) VALUES('EVENTOS','Eventos y festividades');
+INSERT INTO category(category,description) VALUES('GASTRONOMIA','Platos y bebidas tradicionales');
+select * from category WHERE deleted=0 ORDER BY category ASC;

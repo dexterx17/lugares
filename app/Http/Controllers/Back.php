@@ -20,6 +20,12 @@ class Back extends Controller
 		return view('welcome',$this->datos);
 	}
 
+	public function game(){
+
+		$this->datos['items'] = Lugar::all();
+		return view('game',$this->datos);
+	}
+
 	/**
      * Store a newly created resource in storage.
      *

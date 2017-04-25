@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'Back@index');
+Route::get('/game', 'Back@game');
 
 Route::post('/loader','Back@store');
 
