@@ -19,3 +19,11 @@ elixir(function(mix) {
 	mix.copy('node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js',
 		'public/js/');
 });
+
+elixir(function(mix){
+	mix.scripts([
+		'core.js',
+		'ui.js',
+		'login.js',
+	],'public/js/app.js');
+});

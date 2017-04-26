@@ -5730,4 +5730,15 @@ button.close {
   .hidden-print {
     display: none !important; } }
 
+#mapa {
+  width: 100%;
+  height: 500px; }
+
+#lugares .media:hover {
+  border: 2px dashed black; }
+
+#detail img {
+  width: 100%;
+  height: 180px; }
+
 /*# sourceMappingURL=app.css.map */

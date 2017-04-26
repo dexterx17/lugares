@@ -8,3 +8,4 @@ function renderWelcome() {
   welcome.find('.stats .coins').html(Parse.User.current().get('coins'));
   welcome.find('.stats .bombs').html(Parse.User.current().get('bombs'));
 }
+

@@ -21,3 +21,7 @@ Route::post('/loader/{google_id}','Back@store_item');
 
 Route::post('/visited','Back@visited');
 
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
