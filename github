@@ -1,0 +1,41 @@
+User {#199 ▼
+  +token: "95e36ea1dc2934a1069f56cc736cb4eade5a54ed"
+  +refreshToken: null
+  +expiresIn: null
+  +id: 3771680
+  +nickname: "dexterx17"
+  +name: null
+  +email: "jaimesantanal@hotmail.com"
+  +avatar: "https://avatars0.githubusercontent.com/u/3771680?v=3"
+  +user: array:30 [▼
+    "login" => "dexterx17"
+    "id" => 3771680
+    "avatar_url" => "https://avatars0.githubusercontent.com/u/3771680?v=3"
+    "gravatar_id" => ""
+    "url" => "https://api.github.com/users/dexterx17"
+    "html_url" => "https://github.com/dexterx17"
+    "followers_url" => "https://api.github.com/users/dexterx17/followers"
+    "following_url" => "https://api.github.com/users/dexterx17/following{/other_user}"
+    "gists_url" => "https://api.github.com/users/dexterx17/gists{/gist_id}"
+    "starred_url" => "https://api.github.com/users/dexterx17/starred{/owner}{/repo}"
+    "subscriptions_url" => "https://api.github.com/users/dexterx17/subscriptions"
+    "organizations_url" => "https://api.github.com/users/dexterx17/orgs"
+    "repos_url" => "https://api.github.com/users/dexterx17/repos"
+    "events_url" => "https://api.github.com/users/dexterx17/events{/privacy}"
+    "received_events_url" => "https://api.github.com/users/dexterx17/received_events"
+    "type" => "User"
+    "site_admin" => false
+    "name" => null
+    "company" => null
+    "blog" => null
+    "location" => null
+    "email" => "jaimesantanal@hotmail.com"
+    "hireable" => null
+    "bio" => null
+    "public_repos" => 40
+    "public_gists" => 0
+    "followers" => 0
+    "following" => 2
+    "created_at" => "2013-03-05T03:17:20Z"
+    "updated_at" => "2017-04-12T02:45:14Z"
+}

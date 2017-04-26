@@ -12,7 +12,7 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+    mix.sass(['app.scss','../../../node_modules/font-awesome/scss/font-awesome.scss']);
 });
 
 elixir(function(mix) {
@@ -22,8 +22,9 @@ elixir(function(mix) {
 
 elixir(function(mix){
 	mix.scripts([
-		'core.js',
+		//'core.js',
 		'ui.js',
 		'login.js',
+		'game.js',
 	],'public/js/app.js');
 });

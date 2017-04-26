@@ -12,16 +12,32 @@
 */
 
 Route::get('/', 'Back@index');
-Route::get('/game', 'Back@game');
 
-Route::post('/loader','Back@store');
+Route::get('/privacidad', function(){
+	return view('privacidad');
+});
 
-Route::get('/loader/{google_id}','Back@get_item');
-Route::post('/loader/{google_id}','Back@store_item');
-
-Route::post('/visited','Back@visited');
+Route::get('/terminos-uso', function(){
+	return view('terminos_uso');
+});
 
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
+Route::get('auth/{provider}', 'Auth\AuthController@redirectToProvider');
+Route::get('auth/{provider}/callback', 'Auth\AuthController@handleProviderCallback');
+
+Route::group(['middleware'=>'auth'],function(){
+	Route::get('/game', 'Back@game');
+	Route::get('/game/{categoria}/{provincia}', [
+		'uses'=>'Back@game_provincia',
+		'as'=>'game.provincia'
+	]);
+	Route::post('/loader','Back@store');
+
+	Route::get('/loader/{google_id}','Back@get_item');
+	Route::post('/loader/{google_id}','Back@store_item');
+
+	Route::post('/visited','Back@visited');
+});
+

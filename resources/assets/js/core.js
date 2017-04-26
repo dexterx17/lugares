@@ -45,9 +45,9 @@ var defaults = {
 $( document ).ready(function() {
 
   // Register input event listeners
-  $( document ).on( 'click', 'header button.share', onShare );
+ // $( document ).on( 'click', 'header button.share', onShare );
 
-  $( document ).on( 'mousedown', '#canvas', onGameCanvasMousedown );
+ // $( document ).on( 'mousedown', '#canvas', onGameCanvasMousedown );
 
   /*
   FB initialization code.

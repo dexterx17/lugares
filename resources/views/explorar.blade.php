@@ -1,10 +1,10 @@
-@extends('template.base')
+@extends('layouts.app')
 @section('content')
 <div class="container">
     <div id="fb-root"></div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            Pruebas de libreria places API Google maps
+            {{ $provincia->provincia }}
             <div id="controles" class="pull-right btn-group">
                 <select name="tipo" id="tipo">
                     <option value="amusement_park">amusement_park</option>

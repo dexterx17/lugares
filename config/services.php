@@ -35,4 +35,21 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'twitter' => [
+        'client_id'     => env('TWITTER_ID','TRRkc1jZDdDWOtsXNGLJ4vQWb'),
+        'client_secret' => env('TWITTER_SECRET','Ct5bbUPGe6xlnjdTsDSRdIV53fM8FrhbtobOs8LFgP7L0XP4aS'),
+        'redirect'      => env('TWITTER_URL'),
+    ],
+
+    'facebook' => [
+        'client_id'     => env('FACEBOOK_ID'),
+        'client_secret' => env('FACEBOOK_SECRET'),
+        'redirect'      => env('FACEBOOK_URL'),
+    ],
+
+    'github' => [
+        'client_id'     => env('GITHUB_ID'),
+        'client_secret' => env('GITHUB_SECRET'),
+        'redirect'      => env('GITHUB_URL'),
+    ],
 ];

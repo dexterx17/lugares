@@ -7,24 +7,45 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Lugar;
+use App\Provincia;
 use App\Categoria;
 use App\User;
 
 class Back extends Controller
 {
-	var $datos;
+	var $datos=[];
 
 	public function index(){
-
-		$this->datos['items'] = Lugar::all();
 		return view('welcome',$this->datos);
 	}
 
-	public function game(){
+	    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function game()
+    {
+        $this->datos['categorias'] = Categoria::orderBy('categoria','ASC')->get()->lists('nombre','categoria');
+        
+        $this->datos['provincias'] = Provincia::byPais(68)->orderBy('provincia','ASC')->get()->lists('provincia','id_1');
+            
+        
+        return view('inicio',$this->datos);
+    }
 
-		$this->datos['items'] = Lugar::all();
-		return view('game',$this->datos);
-	}
+    public function game_provincia($categoria,$provincia)
+    {
+    	$categoria = Categoria::find($categoria);
+    	$provincia = Provincia::where('id_0',68)->where('id_1',$provincia)->first();
+
+    	$this->datos['categoria']=$categoria;
+    	$this->datos['provincia']=$provincia;
+
+        $this->datos['items'] = Lugar::byCategoria($categoria)->get();
+
+    	return view('explorar',$this->datos);
+    }
 
 	/**
      * Store a newly created resource in storage.

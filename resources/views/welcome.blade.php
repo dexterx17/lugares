@@ -3,12 +3,23 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading">Welcome</div>
-
+                <div class="panel-heading">{{ trans('comun.bienvenido') }}</div>
                 <div class="panel-body">
-                    Your Application's Landing Page.
+                   <h4 id="objetivo_corto">{{ trans('comun.objetivo_corto') }}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{{ url('/login') }}">{{ trans('comun.iniciar_sesion') }}</a>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{{ url('/register') }}">{{ trans('comun.registrate') }}</a>
                 </div>
             </div>
         </div>

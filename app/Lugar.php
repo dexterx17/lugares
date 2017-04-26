@@ -39,4 +39,12 @@ class Lugar extends Model
             $sq->where('lugar_id',$lugar_id);
         });
     }
+
+    public function scopeByCategoria($query, $categoria){
+        return $query->whereIn('id',function($q) use ($categoria) {
+            $q->select('lugar_id');
+            $q->from('categoria_lugar');
+            $q->where('categoria_id',$categoria);
+        });
+    }
 }
