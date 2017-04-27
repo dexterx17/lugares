@@ -26,9 +26,9 @@
     - create a new App and retrieve the app ID and namespace from Facebook
     Developer site at https://developers.facebook.com/apps
 */
-var server_url = "https://friendsmashsample.herokuapp.com";
-var appId = '480369938658210';
-var appNamespace = 'friendsmashsample';
+var server_url = "http://169.57.152.110/fb";
+var appId = '1313714368710654';
+var appNamespace = 'friendsconocesecuadormashsample';
 var appCenterURL = '//www.facebook.com/appcenter/' + appNamespace;
 
 var g_useFacebook = true;
@@ -45,7 +45,11 @@ var defaults = {
 $( document ).ready(function() {
 
   // Register input event listeners
- // $( document ).on( 'click', 'header button.share', onShare );
+  $( document ).on( 'change', '#select_provincia', onChangeProvincia );
+
+  $( document ).on( 'change', '#select_categoria', onChangeCategoria );
+
+  $( document ).on( 'click', '.media a', onListPlaceClick );
 
  // $( document ).on( 'mousedown', '#canvas', onGameCanvasMousedown );
 
@@ -64,25 +68,25 @@ $( document ).ready(function() {
   requests to the same friend without another dialog. This streamlines the
   process of sharing with friends.
   */
-  FB.init({
+  /*FB.init({
     appId: appId,
     frictionlessRequests: true,
     status: true,
     version: 'v2.5'
   });
-
+*/
   /*
   Reports that the page is now usable by the user, for collecting performance
   metrics.
   https://developers.facebook.com/docs/reference/javascript/FB.Canvas.setDoneLoading
   */
-  FB.Canvas.setDoneLoading();
+//  FB.Canvas.setDoneLoading();
 
   /*
   Registers the callback for inline processing of user actions
   https://developers.facebook.com/docs/reference/javascript/FB.Canvas.setUrlHandler
   */
-  FB.Canvas.setUrlHandler( urlHandler );
+//  FB.Canvas.setUrlHandler( urlHandler );
 
   /*
   Checking the authentication status is an asynchronous process which will
@@ -92,6 +96,6 @@ $( document ).ready(function() {
   By subscribing to these events, we can control what happens next in the
   initialization process.
   */
-  FB.Event.subscribe('auth.authResponseChange', onAuthResponseChange);
-  FB.Event.subscribe('auth.statusChange', onStatusChange);
+//  FB.Event.subscribe('auth.authResponseChange', onAuthResponseChange);
+//  FB.Event.subscribe('auth.statusChange', onStatusChange);
 });

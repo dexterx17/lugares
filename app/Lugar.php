@@ -40,6 +40,23 @@ class Lugar extends Model
         });
     }
 
+    public function scopeVisitedByCategoriaProvincia($query,$user_id,$categoria_id,$provincia_id){
+        $lugar_id = $this->id;
+        return $query->where('id_1',$provincia_id)
+            ->whereIn('id',function($sq) use ($user_id,$lugar_id){
+                $sq->select('lugar_id');
+                $sq->from('lugar_user');
+                $sq->where('user_id',$user_id);
+                $sq->where('lugar_id',$lugar_id);
+            })
+            ->whereIn('id',function($sq) use ($lugar_id,$categoria_id){
+                $sq->select('lugar_id');
+                $sq->from('categoria_lugar');
+                $sq->where('categoria_id',$categoria_id);
+                $sq->where('lugar_id',$lugar_id);
+            });
+    }
+
     public function scopeByCategoria($query, $categoria){
         return $query->whereIn('id',function($q) use ($categoria) {
             $q->select('lugar_id');

@@ -23,6 +23,10 @@ class CreateLugarsTable extends Migration
             $table->string('google_id')->unique();
             $table->double('lat');
             $table->double('lng');
+            $table->integer('id_0')->nullable();
+            $table->integer('id_1')->nullable();
+            $table->integer('id_2')->nullable();
+            $table->integer('id_3')->nullable();
             $table->boolean('loaded')->defaut(false);
             $table->timestamps();
         });

@@ -11,15 +11,21 @@ use App\Provincia;
 use App\Categoria;
 use App\User;
 
+use Auth;
+
 class Back extends Controller
 {
 	var $datos=[];
+
+	public function __construct(){
+        include_once(app_path() . '/Libraries/Mapserver.php');
+    }
 
 	public function index(){
 		return view('welcome',$this->datos);
 	}
 
-	    /**
+	/**
      * Show the application dashboard.
      *
      * @return \Illuminate\Http\Response
@@ -37,12 +43,19 @@ class Back extends Controller
     public function game_provincia($categoria,$provincia)
     {
     	$categoria = Categoria::find($categoria);
+    	$provincias = Provincia::where('id_0',68)->orderBy('provincia','ASC')->get();
     	$provincia = Provincia::where('id_0',68)->where('id_1',$provincia)->first();
 
+
+    	$this->datos['categorias'] = Categoria::orderBy('categoria','ASC')->get();
     	$this->datos['categoria']=$categoria;
     	$this->datos['provincia']=$provincia;
 
-        $this->datos['items'] = Lugar::byCategoria($categoria)->get();
+    	$this->datos['provincias']=$provincias;
+
+        $this->datos['items'] = Lugar::byCategoria($categoria->categoria)->get();
+
+        $this->datos['items_visitados'] = Lugar::visitedByCategoriaProvincia(Auth::user()->id,$categoria->categoria,$provincia->id_1)->get();
 
     	return view('explorar',$this->datos);
     }
@@ -54,11 +67,13 @@ class Back extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-		$categoria = Categoria::findOrNew($request->type);
-
-		$categoria->categoria= $request->type;
-		$categoria->icono_url = $request->icon;
-		$categoria->save();
+    	$categorias = $request->type;
+    	foreach ($categorias as $key => $c) {
+			$categoria = Categoria::firstOrNew(['categoria'=>$c]);
+			$categoria->categoria= $c;
+			$categoria->icono_url = $request->icon;
+			$categoria->save();
+		}
 
 	    $lugar = new Lugar();
 	    $lugar->name = $request->name;
@@ -66,10 +81,18 @@ class Back extends Controller
 	    $lugar->lat = $request->lat;
 	    $lugar->lng = $request->lng;
 	    $lugar->google_id = $request->place_id;
-	    
-	    if($lugar->save()){
-	    	$lugar->categorias()->attach($categoria);
-	        return response()->json($lugar);
+	    $loc= qryPoint($lugar->lat,$lugar->lng);
+	    $lugar->id_0 = $loc['id_0'];
+	    $lugar->id_1 = $loc['id_1'];
+	    $lugar->id_2 = $loc['id_2'];
+	    $lugar->id_3 = $loc['id_3'];
+	    try{
+		    if($lugar->save()){
+		    	$lugar->categorias()->sync($categorias);
+		        return response()->json($lugar);
+		    }
+	    }catch(\Exception $er){
+	    	return response()->json(['lugar_store_error']);
 	    }
 	    return response()->json(['lugar_store_error']);
 	}
@@ -85,7 +108,7 @@ class Back extends Controller
     	$categorias = $request->categorias;
 
     	foreach ($categorias as $key => $c) {
-	    		$categoria = Categoria::findOrNew($c);
+	    		$categoria = Categoria::firstOrNew(['categoria'=>$c]);
 	    		$categoria->categoria= $c;
 	    		$categoria->icono_url = "";
 	    		$categoria->save();

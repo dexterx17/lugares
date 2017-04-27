@@ -1,59 +1,63 @@
 @extends('layouts.app')
+
+@section('title',$provincia->provincia.' - '.$categoria->nombre)
 @section('content')
 <div class="container">
     <div id="fb-root"></div>
+
     <div class="panel panel-default">
         <div class="panel-heading">
-            {{ $provincia->provincia }}
-            <div id="controles" class="pull-right btn-group">
-                <select name="tipo" id="tipo">
-                    <option value="amusement_park">amusement_park</option>
-                    <option value="aquarium">aquarium</option>
-                    <option value="art_gallery">art_gallery</option>
-                    <option value="bar">bar</option>
-                    <option value="cafe">cafe</option>
-                    <option value="campground">campground</option>
-                    <option value="casino">casino</option>
-                    <option value="cemetery">cemetery</option>
-                    <option value="church">church</option>
-                    <option value="city_hall">city_hall</option>
-                    <option value="clothing_store">clothing_store</option>
-                    <option value="convenience_store">convenience_store</option>
-                    <option value="courthouse">courthouse</option>
-                    <option value="embassy">embassy</option>
-                    <option value="florist">florist</option>
-                    <option value="gym">gym</option>
-                    <option value="hindu_temple">hindu_temple</option>
-                    <option value="home_goods_store">home_goods_store</option>
-                    <option value="liquor_store">liquor_store</option>
-                    <option value="locksmith">locksmith</option>
-                    <option value="lodging">lodging</option>
-                    <option value="meal_delivery">meal_delivery</option>
-                    <option value="meal_takeaway">meal_takeaway</option>
-                    <option value="mosque">mosque</option>
-                    <option value="movie_theater">movie_theater</option>
-                    <option value="museum">museum</option>
-                    <option value="night_club">night_club</option>
-                    <option value="parking">parking</option>
-                    <option value="pet_store">pet_store</option>
-                    <option value="restaurant">restaurant</option>
-                    <option value="shoe_store">shoe_store</option>
-                    <option value="shopping_mall">shopping_mall</option>
-                    <option value="spa">spa</option>
-                    <option value="stadium">stadium</option>
-                    <option value="subway_station">subway_station</option>
-                    <option value="synagogue">synagogue</option>
-                    <option value="train_station">train_station</option>
-                    <option value="zoo">zoo</option>
-                </select>
-                <select name="radio" id="radio">
-                    <option value="1000">1000</option>
-                    <option selected value="5000">5000</option>
-                    <option value="10000">10000</option>
-                    <option value="50000">50000</option>
-                </select>
-                <button type="button" id="buscar">BUSCAR</button>
-            </div>
+            <div class="page-nav">
+                <div class="page-nav-fixed">
+                    <div class="limit">
+                        <nav class="page-nav-breadcrubms">
+                            <div class="page-nav-breadcrumbs-text">{{ trans('comun.estas_en') }}</div>
+                            <ul itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                                <li class="current-menu-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                                    <a itemprop="item" href="#">
+                                        <span itemprop="name"> {{ $provincia->provincia }}</span><span class="fa fa-chevron-down"></span>
+                                    </a>
+                                    <ul itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                                        @foreach($provincias as $prov)
+                                            @if($provincia->id!=$prov->id)
+                                                <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                                                    <a itemprop="item" href="{{route('game.provincia',['provincia'=>$prov->id_1,'categoria'=>$categoria->categoria])}}">
+                                                        <span itemprop="name"> {{ $prov->provincia }}</span>
+                                                    </a>
+                                                </li>
+                                            @endif 
+                                        @endforeach
+                                    </ul>
+                                    <meta itemprop="position" content="1">
+                                </li>
+                                <li class="current-menu-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                                    <a itemprop="item" href="#">
+                                        <span itemprop="name"> {{ $categoria->nombre }}</span><span class="fa fa-chevron-down"></span>
+                                    </a>
+                                    <ul itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                                        @foreach($categorias as $cat)
+                                            @if($categoria->categoria!=$cat->categoria)
+                                                <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+                                                    <a itemprop="item" href="{{route('game.provincia',[$cat->categoria,$provincia->id_1])}}">
+                                                        <span itemprop="name"> {{ $cat->nombre }}</span>
+                                                    </a>
+                                                </li>
+                                            @endif 
+                                        @endforeach
+                                    </ul>
+                                    <meta itemprop="position" content="1">
+                                </li>
+                            </ul>
+                            <meta itemprop="position" content="2">
+                        </nav>
+                        <nav class="page-nav-subpages" data-icons="false,map-marker,calendar,star,image">
+                            <ul>
+                                <li><a class="current" href="#"><span id="n_lugares" class="badge">{{ count($items) }}</span> {{ trans('comun.lugares_total') }}</a></li>
+                            </ul>
+                        </nav>
+                    </div><!--/limit-->
+                </div><!--/page-nav-fixed-->
+            </div><!--/page-nav-->
         </div>
         <div class="panel-body">
             <div class="row">
@@ -64,13 +68,17 @@
                     <div id="tabs">
                       <!-- Nav tabs -->
                       <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#lugares" aria-controls="lugares" role="tab" data-toggle="tab">Lugares <span id="n_lugares" class="badge">{{ count($items) }}</span></a></li>
+                        <li role="presentation" class="active"><a href="#lugares" aria-controls="lugares" role="tab" data-toggle="tab">{{ trans('comun.por_visitar') }} <span id="n_lugares" class="badge">{{ count($items) }}</span></a></li>
                         <li role="presentation"><a href="#detail" aria-controls="detail" role="tab" data-toggle="tab">Detalles</a></li>
+                        <li role="presentation"><a href="#explorados" aria-controls="explorados" role="tab" data-toggle="tab">{{ trans('comun.visitados') }} <span id="n_lugares" class="badge">{{ count($items_visitados) }}</span> </a></li>
                        </ul>
 
                       <!-- Tab panes -->
                       <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="lugares">
+                        <div role="tabpanel" class="tab-pane active" id="lugares" base-url="{{ route('loader') }}" token="{{ Session::token() }}">
+                            <div class="loading">
+                                Loading...
+                            </div>
                         @foreach($items as $key=>$item)
                             <div class="media @if($item->visited(1)->count()) bg-success @endif" id="{{ $item->google_id }}">
                                 <div class="media-left">
@@ -114,7 +122,24 @@
                                 </div>
                             </div>-->
                         </div>
+                        <div role="tabpanel" class="tab-pane" id="explorados">
 
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="templates">
+                            <div class="template-lugar " id="">
+                                <div class="media-left">
+                                    <a href="#" class="">
+                                        <img alt="name" class="media-object" width="50" height="50" src=""/>
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">
+                                        name
+                                    </h4>
+                                        <span class="vicinity">dir</span>
+                                </div>
+                            </div>
+                        </div>
                       </div>
 
                     </div>
@@ -124,12 +149,15 @@
         </div>
         <div class="panel-footer">
             <div class="pull-left">
-                <span class="zoom"></span>
+                <span id="id_categoria">{{ $categoria->categoria }}</span>
+                <span class="zoom">{{ $provincia->zoom }}</span>
                 |||
-                <span class="lat"></span>,
-                <span class="lng"></span>
+                <span class="lat">{{ $provincia->lat }}</span>,
+                <span class="lng">{{ $provincia->lng }}</span>
                 |||
-                <span class="bounds"></span>
+                <span class="bounds">
+                        {{ $provincia->minx }},{{ $provincia->miny }} - {{ $provincia->maxx }},{{ $provincia->maxy }}
+                </span>
             </div>
             <hr>
             <a href="https://developers.google.com/maps/documentation/javascript/marker-clustering" target="_blank">https://developers.google.com/maps/documentation/javascript/marker-clustering</a>

@@ -215,7 +215,7 @@ class CategoriasSeeder extends Seeder
     	];
 
     	for ($i=0; $i < count($types) ; $i++) { 
-	        factory(Categoria::class)->create(['nombre'=>$names[$i],'categoria'=>ucfirst($types[$i])]);
+	        factory(Categoria::class)->create(['nombre'=>ucfirst($names[$i]),'categoria'=>$types[$i]]);
     	}
     }
 }

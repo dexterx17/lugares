@@ -22,9 +22,9 @@ elixir(function(mix) {
 
 elixir(function(mix){
 	mix.scripts([
-		//'core.js',
 		'ui.js',
 		'login.js',
 		'game.js',
+		'core.js',
 	],'public/js/app.js');
 });

@@ -2,18 +2,7 @@ $('#btn_lugares').on('click',function(e){
     $('#tabs a[href="#lugares"]').tab('show');
 });
 
-$('#buscar').on('click',function(e){
-    buscar_lugares($('.lat').html(),$('.lng').html());
-});
 
-$('.media a').on('click',function(e){
-    e.preventDefault();
-    if($(this).hasClass('local')){
-        get_info($(this).attr('href'));
-    }else{
-        detail_info($(this).attr('href'));
-    }
-});
 $('button.visitado').on('click',function(e){
     e.preventDefault();
     var res = confirm('Conoces este lugar?');
@@ -25,7 +14,7 @@ $('button.visitado').on('click',function(e){
 });
 
 function mark_place(place_id){
-    $.post('{{ url("visited") }}',{'place_id':place_id,'user_id':1,_token: '{{ Session::token() }}'},function(response){
+    $.post('{{ url("visited") }}',{'place_id':place_id,_token: '{{ Session::token() }}'},function(response){
         console.log(response);
     });
 }
@@ -53,13 +42,26 @@ function get_info(place_id){
 var map;
 var infoWindow
 function initMap() {
-  map = new google.maps.Map(document.getElementById('mapa'), {
-    center: {lat: -1.2430580707463799 , lng:  -78.6267551779747},
-    zoom: 15
-  });
+    console.log('initMap');
+    var latitud = parseFloat($('.lat').html());
+    var longitud = parseFloat($('.lng').html());
+    var zoom = parseFloat($('.zoom').html());
+    var radio = 2500;
+    var categorias = [$('#id_categoria').html()];
+    console.log('lat:'+latitud);
+    console.log('lng:'+longitud);
+    console.log('zoom:'+zoom);
+    console.log('--------------------------------------------------------------------');
+
+    map = new google.maps.Map(document.getElementById('mapa'), {
+        center: {lat: latitud , lng:  longitud},
+        zoom: parseInt($('.zoom').html())
+    });
 
     map.addListener('zoom_changed', function() {
         $('.zoom').html(map.getZoom());
+
+        buscar_lugares(categorias, radio);
     });
 
     map.addListener('mousemove', function(e) {
@@ -72,27 +74,28 @@ function initMap() {
         $('.bounds').html(bounds.b.b+' , '+bounds.b.f+'  ::  '+bounds.f.b+' , '+bounds.f.f);
     });
 
-  infoWindow = new google.maps.InfoWindow({map: map});
+    infoWindow = new google.maps.InfoWindow({map: map});
   
 
-  // Try HTML5 geolocation.
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-    var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-    };
+    // Try HTML5 geolocation.
+    /*if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
 
-    map.setCenter(pos);
+            map.setCenter(pos);
 
-    }, function() {
-      handleLocationError(true, infoWindow, map.getCenter());
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
+        }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+        });
+    } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infoWindow, map.getCenter());
+    }*/
 
+    buscar_lugares(categorias, radio);
 }
 
 
@@ -187,61 +190,53 @@ function detail_info(place_id){
     }
 }
 
-function buscar_lugares(lat,lng){
+function buscar_lugares(categorias,radio){
+    var lat = parseFloat($('.lat').html());
+    var lng = parseFloat($('.lng').html());
     console.log('lat: '+lat);
     console.log('lng: '+lng);
+    console.log('categorias: ');
+    console.log(categorias);
+    console.log('radio: '+radio);
     var service = new google.maps.places.PlacesService(map);
         service.nearbySearch({
-          location: {lat: parseFloat(lat) , lng: parseFloat(lng)},
-          radius: $('#radio').val(),
-          type: [$('#tipo').val()]
-    }, callback);
-}
+          location: {lat: lat , lng: lng},
+          radius: radio,
+          type: categorias
+    }, function callback_lugares(results, status) {
+        console.log('results');
+        console.log(results);
+        console.log('status');
+        console.log(status);
+            var items = [];
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                renderPlaces(results);
+              for (var i = 0; i < results.length; i++) {
+                items.push({
+                    'place_id':results[i].place_id,
+                    'name':results[i].name,
+                });
+              
+                createMarker(results[i]);
 
-function callback(results, status) {
-    var items = [];
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-      for (var i = 0; i < results.length; i++) {
-        items.push({
-            'place_id':results[i].place_id,
-            'name':results[i].name,
-        });
-        console.log('-------------------------------------------------------');
-        var item = '<div class="media"><div class="media-left"><a href="'+results[i]['place_id'];
-         if(typeof results[i].photos !== "undefined"){
-            item += '"><img class="media-object" src="'+results[i].photos[0].getUrl({'maxWidth': 50, 'maxHeight': 50});
-         }else{
-            item += '"><img class="media-object" src="'+results[i].icon ;
-         }
-        item += '" alt="'+results[i].name+'"></a></div><div class="media-body">';
-        item += '<h4 class="media-heading">'+results[i].name+'</h4>';
-        item += results[i].vicinity + '</div></div>';
-        $('#lugares').append(item);
-        createMarker(results[i]);
+                var url=$('#lugares').attr('base-url');
+                var token=$('#lugares').attr('token');
+                $.post(url,{
+                    name : results[i].name,
+                    place_id : results[i].place_id,
+                    vecinity : results[i].vicinity,
+                    icon : results[i].icon,
+                    _token: token,
+                    lat: results[i].geometry.location.lat(),
+                    lng: results[i].geometry.location.lng(),
+                    type:categorias
+                },function(response){
+                    console.log(response);
+                });
 
-        $.post('{{ url("loader") }}',{
-            name : results[i].name,
-            place_id : results[i].place_id,
-            vecinity : results[i].vicinity,
-            icon : results[i].icon,
-            _token: '{{ Session::token() }}',
-            lat: results[i].geometry.location.lat(),
-            lng: results[i].geometry.location.lng(),
-            type:$('#tipo').val()
-        },function(response){
-            console.log(response);
-        });
-
-      }
-        $('.media a').on('click',function(e){
-            e.preventDefault();
-            if($(this).hasClass('local')){
-
-            }else{
-                detail_info($(this).attr('href'));
+              }
             }
-        });
-    }
+    });
 }
 
 function createMarker(place) {
