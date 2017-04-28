@@ -2,17 +2,6 @@ $('#btn_lugares').on('click',function(e){
     $('#tabs a[href="#lugares"]').tab('show');
 });
 
-
-$('button.visitado').on('click',function(e){
-    e.preventDefault();
-    var res = confirm('Conoces este lugar?');
-    if(res){
-        mark_place($(this).attr('place'));
-    }else{
-        alert('viaja mas');
-    }
-});
-
 function mark_place(place_id){
     $.post('{{ url("visited") }}',{'place_id':place_id,_token: '{{ Session::token() }}'},function(response){
         console.log(response);
@@ -98,31 +87,6 @@ function initMap() {
     buscar_lugares(categorias, radio);
 }
 
-
-function build_detail_from_server(place){
-    var el = '<div class="panel';
-    el += '"><div class="panel-heading"><h3>'+place.name;
-    el += '<button type="button" place="'+place.google_id+'" class="visitado pull-right btn btn-info">Visitado</button>';
-    el +='</h3></div><div class="panel-body">';
-    if(typeof place.imagen!== "undefined")
-        el += '<img class="img-responsive" src="'+place.imagen+'">';
-    el += '<ul class="list-group">';
-    el += '<li class="list-group-item"><i class="glyphicon glyphicon-home"></i> '+place.direccion+'</li>';
-    if (typeof place.telefono !== 'undefined' )
-        el += '<li class="list-group-item"><i class="glyphicon glyphicon-earphone"></i> '+place.telefono+'</li>';
-    el += '<li class="list-group-item"><i class="glyphicon glyphicon-globe"></i> <a href="'+place.website+'">website</a></li>';
-    el += '<li class="list-group-item">Categorias: ';
-        el += '<ul >';
-        for (var i = 0; i < place.cats.length; i++) {
-            el += '<li><a href="#" >'+place.cats[i]+'</a></li>';
-        };
-        el += '</ul>';
-    el += '</li>';
-    el += '</ul><hr>';
-    el += '</div></div>';
-    return el;
-}
-
 function detail_info(place_id){
     //'ChIJN1t_tDeuEmsRUsoyG83frY4'
     var request = {
@@ -136,56 +100,28 @@ function detail_info(place_id){
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         $('#tabs a[href="#detail"]').tab('show');
         var categorias =[];
-        var el = '<div class="panel"><div class="panel-heading"><h3>';
-        el += '<button type="button" place="'+place.place_id+'" class="visitado pull-right btn btn-info">Visitado</button>';
-        el += place.name+'</h3></div><div class="panel-body">';
-        if(typeof place.photos!== "undefined")
-            el += '<img class="img-responsive" src="'+place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 250})+'">';
-        el += '<ul class="list-group">';
-        el += '<li class="list-group-item"><i class="glyphicon glyphicon-home"></i> '+place['formatted_address']+'</li>';
-        if (typeof place.international_phone_number !== 'undefined' )
-            el += '<li class="list-group-item"><i class="glyphicon glyphicon-earphone"></i> '+place['international_phone_number']+'</li>';
-        if (typeof place.formatted_phone_number !== 'undefined' )
-            el += '<li class="list-group-item"><i class="glyphicon glyphicon-earphone"></i> '+place['formatted_phone_number']+'</li>';
-        el += '<li class="list-group-item"><i class="glyphicon glyphicon-globe"></i> <a href="'+place['website']+'">website</a></li>';
-        el += '<li class="list-group-item">Categorias: ';
-            el += '<ul >';
-            for (var i = 0; i < place.types.length; i++) {
-                el += '<li><a href="#" >'+place.types[i]+'</a></li>';
-                categorias.push(place.types[i]);
-            };
-            el += '</ul>';
-        el += '</li>';
-        el += '</ul><hr>';
-        el += '</div></div>';
-        $('#detail').html(el);
+        for (var i = 0; i < place.types.length; i++) {
+            categorias.push(place.types[i]);
+        };
+        renderPlaceInfo(place);
         var img='';
-         if(typeof place.photos!== "undefined"){
+        if(typeof place.photos!== "undefined"){
             img = place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 250});
             console.log('img: '+img);
-         }
-            $.post('{{ url("loader") }}/'+place.place_id,{
-                name : place.name,
-                place_id : place.place_id,
-                vecinity : place.vicinity,
-                imagen:img,
-                direccion : place.formatted_address,
-                telefono : place.formatted_phone_number,
-                categorias: categorias,
-                web : place.website,
-                _token: '{{ Session::token() }}'
-            },function(response){
-                console.log(response);
-            });
-            $('button.visitado').on('click',function(e){
-                e.preventDefault();
-                var res = confirm('Conoces este lugar?');
-                if(res){
-                    mark_place($(this).attr('place'));
-                }else{
-                    alert('viaja mas');
-                }
-            });
+        }
+        $.post('{{ url("loader") }}/'+place.place_id,{
+            name : place.name,
+            place_id : place.place_id,
+            vecinity : place.vicinity,
+            imagen:img,
+            direccion : place.formatted_address,
+            telefono : place.formatted_phone_number,
+            categorias: categorias,
+            web : place.website,
+            _token: '{{ Session::token() }}'
+        },function(response){
+            console.log(response);
+        });
       }
     }
 }

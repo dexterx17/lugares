@@ -3,6 +3,8 @@
 return [
 
     'app_name' => 'Wekain',
+    'espanol' => 'Español',
+    'ingles' => 'Ingles',
     'inicio' => 'Inicio',
     'pais' => 'Pais',
     'provincia' => 'Provincia',
@@ -22,11 +24,16 @@ return [
     'bienvenido' => 'Bienvenid@',
     'estas_en' => 'Esta en',
     'lugares' => 'Lugares',
+    'acciones' => 'Acciones',
     'crear' => 'Crear',
     'editar' => 'Editar',
+    'guardar' => 'Guardar',
+    'cancelar' => 'Cancelar',
     'eliminar' => 'Eliminar',
     'listado' => 'Listado',
+    'listado' => 'Listado',
     'lugares_total' => 'Lugares en total ',
+    'explorar' => 'Explorar',
     'visitados' => 'Visitados',
     'por_visitar' => 'Por visitar',
     'selecciona_provincia' => 'Selecciona una provincia',
@@ -34,6 +41,13 @@ return [
     'categorias' => 'Categorias',
     'categoria' => 'Categoria',
     'cuantos_conoces' => 'Cuánto conoces',
+    'objetivo' => 'Objetivo',
     'objetivo_corto' => 'Queremos que vivas nuevas experiencias, mostrandote todos los lugares geniales que hay a tu alrededor y compares con tus amigos quien es el más conocedor',
-    'objetivo_medio' => 'Queremos que vivas nuevas experiencias, visitando cada uno de los lugares que tenemos registrados para ti.'
+    'objetivo_medio' => 'Queremos que vivas nuevas experiencias, visitando cada uno de los lugares que tenemos registrados para ti.',
+    'informacion' => 'Información',
+    'traducciones' => 'Traducciones',
+    'slug' => 'Slug',
+    'orden' => 'Orden',
+    'descripcion' => 'Descripción'
+
 ];

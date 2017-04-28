@@ -15,8 +15,8 @@ class CreateLugarsTable extends Migration
         Schema::create('lugares', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->string('direccion');
-            $table->string('vecinity');
+            $table->string('direccion')->nullable();
+            $table->string('vecinity')->nullable();
             $table->string('imagen')->nullable();
             $table->string('telefono')->nullable();
             $table->string('web')->nullable();

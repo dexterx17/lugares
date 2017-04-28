@@ -97,30 +97,6 @@
                         </div>
                         <div role="tabpanel" class="tab-pane" id="detail">
                             Selecciona un <button  id="btn_lugares" title="Lugar">lugar</button>
-                            <!--<div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3>
-                                        Titi Park
-                                        <button type="button" place="" class="visitado pull-right btn btn-info">Visitado</button>
-                                    </h3>
-                                </div>
-                                <div class="panel-body">
-                                <img class="img-responsive" src="https://lh4.googleusercontent.com/-6YHtST5k04w/WPI35S-cPqI/AAAAAAAAABE/Nk0oJtFflF8P6DlM_jAsswpIs6qfjM-zQCLIB/w200-h250-k/">
-                                    <ul class="list-group">
-                                        <li class="list-group-item"><i class="glyphicon glyphicon-home"></i> Huayna Capac, Ambato 180202, Ecuador</li>
-                                        <li class="list-group-item"><i class="glyphicon glyphicon-earphone"></i> null</li>
-                                        <li class="list-group-item"><i class="glyphicon glyphicon-globe"></i> <a href="undefined">website</a></li>
-                                        <li class="list-group-item">Categorias: 
-                                            <ul>
-                                                <li><a href="#">amusement_park</a></li>
-                                                <li><a href="#">establishment</a></li>
-                                                <li><a href="#">point_of_interest</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul
-                                    ><hr>
-                                </div>
-                            </div>-->
                         </div>
                         <div role="tabpanel" class="tab-pane" id="explorados">
 
@@ -137,6 +113,28 @@
                                         name
                                     </h4>
                                         <span class="vicinity">dir</span>
+                                </div>
+                            </div>
+                            <div class="panel panel-default template-lugar-info">
+                                <div class="panel-heading">
+                                    <h3>
+                                        Titi Park
+                                        <button type="button" place="" class="visitado pull-right btn btn-info">Visitado</button>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                <img class="img-responsive" src="#">
+                                    <ul class="list-group">
+                                        <li class="list-group-item direction"><i class="glyphicon glyphicon-home"></i> Huayna Capac, Ambato 180202, Ecuador</li>
+                                        <li class="list-group-item international-phone"><i class="glyphicon glyphicon-earphone"></i> null</li>
+                                        <li class="list-group-item phone"><i class="glyphicon glyphicon-earphone"></i> null</li>
+                                        <li class="list-group-item website"><i class="glyphicon glyphicon-globe"></i> <a href="undefined">website</a></li>
+                                        <li class="list-group-item">{{ trans('comun.categorias") }}: 
+                                            <ul class="categorias">
+                                            </ul>
+                                        </li>
+                                    </ul
+                                    ><hr>
                                 </div>
                             </div>
                         </div>

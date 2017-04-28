@@ -22,6 +22,7 @@ elixir(function(mix) {
 
 elixir(function(mix){
 	mix.scripts([
+		'../../../node_modules/jquery-sortable/source/js/jquery-sortable-min.js',
 		'ui.js',
 		'login.js',
 		'game.js',

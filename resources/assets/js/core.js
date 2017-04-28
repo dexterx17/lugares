@@ -51,6 +51,8 @@ $( document ).ready(function() {
 
   $( document ).on( 'click', '.media a', onListPlaceClick );
 
+  $( document ).on( 'click', 'button.visitado', onMarkPlace );
+
  // $( document ).on( 'mousedown', '#canvas', onGameCanvasMousedown );
 
   /*

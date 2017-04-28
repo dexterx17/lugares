@@ -37,7 +37,8 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/game') }}">{{ trans('comun.inicio') }}</a></li>
+                    <li><a href="{{ url('/game') }}">{{ trans('comun.explorar') }}</a></li>
+                    <li><a href="{{ url('/categorias') }}">{{ trans('comun.categorias') }}</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

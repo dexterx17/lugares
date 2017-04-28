@@ -14,39 +14,72 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2>
-                                    {{ trans('comun.categorias') }}   <small> {{ trans('comun.listado') }} </small>
+                                    {{ trans('comun.categorias') }}
+                                    <small>
+                                        {{ trans('comun.listado') }}
+                                    </small>
                                 </h2>
                                 <div class="clearfix">
                                 </div>
                             </div>
                             <div class="x_content">
                                 <!-- content starts here -->
-                                <a href="{{ route('categorias.create') }}" class="btn btn-default btn-primary">{{ trans('comun.crear') }} {{ trans('comun.categoria') }}</a>
+                                <a class="btn btn-default btn-primary" href="{{ route('categorias.create') }}">
+                                    {{ trans('comun.crear') }} {{ trans('comun.categoria') }}
+                                </a>
                                 <!-- start categorias list -->
-                                 <ul class='to_do vertical'>
-                                    	@foreach($categorias_data as $index=>$categoria)
-                                        <li data-categoria="{{$categoria->id}}">
-                                            <div>
+                                <table class="table table-responsive table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                #
+                                            </th>
+                                            <th>
+                                                {{ trans('comun.categoria') }}
+                                            </th>
+                                            <th>
+                                                {{ trans('comun.lugares') }}
+                                            </th>
+                                            <th class="text-right">
+                                                {{ trans('comun.acciones') }}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($categorias_data as $index=>$categoria)
+                                        <tr data-categoria="{{$categoria->categoria}}">
+                                            <td>
+                                                <i class="fa fa-arrows movible">
+                                                </i>
+                                            </td>
+                                            <td>
                                                 <a>
-                                                    <i class="fa fa-arrows movible"></i>
+                                                    <span class="badge">
+                                                        {{ ($index+1) }}
+                                                    </span>
                                                     {{ $categoria->nombre }}
                                                 </a>
-                                            
-                                                <div class="text-center">
-                                                    <a class="btn btn-info btn-xs" href="{{ route('categorias.edit',$categoria->id)}}">
-                                                        <i class="fa fa-pencil">
-                                                        </i>
-                                                        {{ trans('comun.editar') }}
-                                                    </a>
-                                                    <a href="{{route('categorias.destroy',$categoria->id)}}" onclick="return confirm('Seguro que deseas eliminarlo')" class="btn btn-danger btn-xs">
-                                                        <i class="fa fa-trash-o"></i> 
-                                                        {{ trans('comun.eliminar') }}
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    	@endforeach
-                                    </ul>
+                                            </td>
+                                            <td>
+                                                {{ $categoria->lugares()->count() }}
+                                            </td>
+                                            <td class="text-right">
+                                                <a class="btn btn-info btn-xs" href="{{ route('categorias.edit',$categoria->categoria)}}">
+                                                    <i class="fa fa-pencil">
+                                                    </i>
+                                                    {{ trans('comun.editar') }}
+                                                </a>
+                                                <a class="btn btn-danger btn-xs" href="{{route('categorias.destroy',$categoria->categoria)}}" onclick="return confirm('Seguro que deseas eliminarlo')">
+                                                    <i class="fa fa-trash-o">
+                                                    </i>
+                                                    {{ trans('comun.eliminar') }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                >
                                 <!-- end categorias list -->
                                 <!-- content ends here -->
                             </div>

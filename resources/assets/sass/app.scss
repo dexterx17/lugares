@@ -1,5 +1,7 @@
  @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+$error : '#FF0000';
+
 #mapa {
 	width: 100%;
 	height: 500px;
@@ -341,10 +343,11 @@
 
 .page-nav .page-nav-anchors ul li a:hover {
     border-color: #eff0f3;
-    color: #428aa5
+    color: #428aa5;
 }
 
 .page-nav .page-nav-anchors ul li a.current {
     border-color: #f8a12d;
-    color: #428aa5
+    color: #428aa5;
 }
+

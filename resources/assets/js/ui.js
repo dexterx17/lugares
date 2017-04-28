@@ -30,6 +30,25 @@ function renderPlaces(places) {
     $('#n_lugares').html(n_lugares+places.length);
 }
 
+function renderPlaceInfo(place){
+    console.log('renderPLacesInfo');
+    var contenedor = $('#detail');
+    var template = $('.template-lugar-info');
+    var item = template.clone().removeClass('template-lugar-info');
+    if(typeof place.photos!== "undefined")
+        item.find('img').attr('src',place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 250}));
+    item.find('h3').text(place.name);
+    item.find('button.visitado').attr('place',place.place_id);
+    item.find('.direction').text(place.formatted_address);
+    item.find('.international-phone').text(place.international_phone_number);
+    item.find('.phone').text(place.formatted_phone_number);
+    item.find('.website').text(place.website);
+    for (var i = 0; i < place.types.length; i++) {
+        item.find('.categorias').append('<li><a href="#" >'+place.types[i]+'</a></li>');
+    };
+    contenedor.html(item);
+}
+
 function setBtnIniciar() {
     var url = $('#btnIniciar').attr('base-url');
     var provincia_id = $('#select_provincia').val();
@@ -55,5 +74,15 @@ function onListPlaceClick(e){
     	get_info($(this).attr('href'));
     }else{
         detail_info($(this).attr('href'));
+    }
+}
+
+function onMarkPlace(e){
+    e.preventDefault();
+    var res = confirm('Conoces este lugar?');
+    if(res){
+        mark_place($(this).attr('place'));
+    }else{
+        alert('viaja mas');
     }
 }

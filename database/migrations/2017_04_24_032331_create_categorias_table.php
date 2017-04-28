@@ -16,7 +16,9 @@ class CreateCategoriasTable extends Migration
             $table->string('categoria')->primary();
             $table->string('nombre')->nullable();
             $table->text('descripcion')->nullable();
+            $table->text('objetivo')->nullable();
             $table->string('icono')->nullable();
+            $table->integer('orden')->default(0);
             $table->string('icono_url');
             $table->timestamps();
         });

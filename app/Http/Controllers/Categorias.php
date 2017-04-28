@@ -32,7 +32,7 @@ class Categorias extends Controller
         $categoria = new Categoria($request->all());
         $categoria->save();
         //flash("$categoria->nombre actualizado correctamente",'success');
-        return redirect()->route('admin.categorias.index');
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -51,7 +51,7 @@ class Categorias extends Controller
         $categoria->fill($request->all());
         $categoria->save();
         //flash("$categoria->nombre actualizado correctamente",'success');
-        return redirect()->route('admin.categorias.index');
+        return redirect()->route('categorias.index');
     }
 
     /**
@@ -61,6 +61,6 @@ class Categorias extends Controller
         $categoria = Categoria::find($id);
         $categoria->delete();
         //flash("Categoria $categoria->nombre eliminada correctamente",'success');
-        return redirect()->route('admin.categorias.index');
+        return redirect()->route('categorias.index');
     }
 }
