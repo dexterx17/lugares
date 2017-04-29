@@ -2,7 +2,7 @@
 
 return [
 
-    'app_name' => 'Wekain',
+    'app_name' => 'Explora Google Places',
     'espanol' => 'Español',
     'ingles' => 'Ingles',
     'inicio' => 'Inicio',
@@ -48,6 +48,15 @@ return [
     'traducciones' => 'Traducciones',
     'slug' => 'Slug',
     'orden' => 'Orden',
-    'descripcion' => 'Descripción'
+    'no_number' => 'Sin telefono',
+    'no_direction' => 'Sin dirección',
+    'estas_seguro' => 'Estas seguro',
+    'eliminado' => 'Eliminado',
+    'eliminado_ok' => 'Elemento eliminado correctado',
+    'eliminarlo' => 'Si, eliminarlo',
+    'activo' => 'Activo',
+    'descripcion' => 'Descripción',
+    'accion_no_se_deshace' => 'Esta acción no se puede deshacer',
+    'desplazate_en_mapa' => 'Desplazate en el mapa, para encontrar más lugares'
 
 ];

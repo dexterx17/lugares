@@ -30,6 +30,7 @@ class Categorias extends Controller
      */
     public function store(Request $request){
         $categoria = new Categoria($request->all());
+
         $categoria->save();
         //flash("$categoria->nombre actualizado correctamente",'success');
         return redirect()->route('categorias.index');
@@ -49,9 +50,17 @@ class Categorias extends Controller
     public function update(Request $request, $id){
         $categoria = Categoria::find($id);
         $categoria->fill($request->all());
+        if($request->has('activa'))
+            $categoria->activa=TRUE;
+        else
+            $categoria->activa=FALSE;
         $categoria->save();
-        //flash("$categoria->nombre actualizado correctamente",'success');
-        return redirect()->route('categorias.index');
+
+        if($request->ajax()){
+            return response()->json($categoria);
+        }else{
+            return redirect()->route('categorias.index');
+        }
     }
 
     /**
@@ -61,6 +70,6 @@ class Categorias extends Controller
         $categoria = Categoria::find($id);
         $categoria->delete();
         //flash("Categoria $categoria->nombre eliminada correctamente",'success');
-        return redirect()->route('categorias.index');
+        return response()->json($categoria);
     }
 }

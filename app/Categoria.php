@@ -13,7 +13,7 @@ class Categoria extends Model
     protected $table = 'categorias';
 
     protected $fillable = [
-        'categoria', 'descripcion', 'icono','icono_url','nombre','orden','objetivo','deleted'
+        'categoria', 'descripcion', 'icono','icono_url','nombre','orden','objetivo','activa'
     ];
 
 

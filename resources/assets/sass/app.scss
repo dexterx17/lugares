@@ -7,8 +7,18 @@ $error : '#FF0000';
 	height: 500px;
 }
 
-#lugares .media:hover{
-    border: 2px dashed black;
+#lugares {
+    .media:hover{
+        border: 2px dashed black;
+    }
+    .loading{
+        text-align: center;   
+        font-size:18px;
+        margin: 5px 0px; 
+    }
+    .help{
+        text-align: center;
+    }
 }
 
 #detail img{

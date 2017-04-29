@@ -74,25 +74,28 @@
                                                 </div>
                                             </div>
                                             <div class="item form-group">
-                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="descripcion">
-                                                    {{ trans('comun.descripcion') }}
-                                                    <span class="required">
-                                                        *
-                                                    </span>
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="activa">
+                                                    {{ trans('comun.activo') }}
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <textarea class="form-control col-md-7 col-xs-12"  id="descripcion" name="descripcion" required="required">{{ $categoria->descripcion }}</textarea>
+                                                    <input class="form-control col-md-7 col-xs-12" value="1" id="activa" name="activa" @if($categoria->activa) checked @endif type="checkbox">
+                                                    </input>
+                                                </div>
+                                            </div>
+                                            <div class="item form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="descripcion">
+                                                    {{ trans('comun.descripcion') }}
+                                                </label>
+                                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                                    <textarea class="form-control col-md-7 col-xs-12"  id="descripcion" name="descripcion">{{ $categoria->descripcion }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="item form-group">
                                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="objetivo">
                                                     {{ trans('comun.objetivo') }}
-                                                    <span class="required">
-                                                        *
-                                                    </span>
                                                 </label>
                                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                                    <textarea class="form-control col-md-7 col-xs-12"  id="objetivo" name="objetivo" required="required">{{ $categoria->objetivo }}</textarea>
+                                                    <textarea class="form-control col-md-7 col-xs-12"  id="objetivo" name="objetivo">{{ $categoria->objetivo }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="ln_solid">
@@ -189,16 +192,6 @@
 @section('js')
     <script type="text/javascript" charset="utf-8" >
         $(document).ready(function(){
-            $('.dropzone').dropzone({
-                'maxFilesize':1,
-                'maxFiles':3,
-                'acceptedFiles':'image/*',
-                'paramName':'imagen',
-                sending:function(file, xhr, formData){
-                    formData.append("_token", '{{ Session::token() }}');
-                    formData.append("referencia", 'categorias');
-                }
-            });
         });
     </script>
 @endsection

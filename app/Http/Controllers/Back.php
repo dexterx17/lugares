@@ -32,7 +32,7 @@ class Back extends Controller
      */
     public function game()
     {
-        $this->datos['categorias'] = Categoria::orderBy('categoria','ASC')->get()->lists('nombre','categoria');
+        $this->datos['categorias'] = Categoria::where('activa',1)->orderBy('categoria','ASC')->get()->lists('nombre','categoria');
         
         $this->datos['provincias'] = Provincia::byPais(68)->orderBy('provincia','ASC')->get()->lists('provincia','id_1');
             
@@ -47,7 +47,7 @@ class Back extends Controller
     	$provincia = Provincia::where('id_0',68)->where('id_1',$provincia)->first();
 
 
-    	$this->datos['categorias'] = Categoria::orderBy('categoria','ASC')->get();
+    	$this->datos['categorias'] = Categoria::where('activa',1)->orderBy('categoria','ASC')->get();
     	$this->datos['categoria']=$categoria;
     	$this->datos['provincia']=$provincia;
 
@@ -55,8 +55,8 @@ class Back extends Controller
 
         $this->datos['items'] = Lugar::byCategoria($categoria->categoria)->get();
 
-        $this->datos['items_visitados'] = Lugar::visitedByCategoriaProvincia(Auth::user()->id,$categoria->categoria,$provincia->id_1)->get();
-
+        $this->datos['items_visitados'] = Lugar::isVisitedByCategoriaProvincia(Auth::user()->id,$categoria->categoria,$provincia->id_1)->get();
+        
     	return view('explorar',$this->datos);
     }
 
@@ -68,33 +68,34 @@ class Back extends Controller
      */
     public function store(Request $request){
     	$categorias = $request->type;
-    	foreach ($categorias as $key => $c) {
-			$categoria = Categoria::firstOrNew(['categoria'=>$c]);
-			$categoria->categoria= $c;
-			$categoria->icono_url = $request->icon;
-			$categoria->save();
-		}
+    	$new_items = 0;
+    	$items = [];
+    	if($request->has('items')){
+    		foreach ($request->items as $key => $item) {
+			    $lugar = new Lugar();
+			    $lugar->lat = $item['lat'];
+			    $lugar->lng = $item['lng'];
+			    $lugar->google_id = $item['place_id'];
+			    $loc= qryPoint($lugar->lat,$lugar->lng);
+			    $lugar->id_0 = $loc['id_0'];
+			    $lugar->id_1 = $loc['id_1'];
+			    $lugar->id_2 = $loc['id_2'];
+			    $lugar->id_3 = $loc['id_3'];
+			    try{
+				    if($lugar->save()){
+				    	$lugar->categorias()->sync($categorias);
+				        $new_items++;
+				    }
+			    }catch(\Exception $er){
+			    	
+			    }
+			    $lugar->visited = (boolean)$lugar->isVisited(Auth::user()->id)->count();
+			    $items[]=$lugar;	
+    		}
+	    	return response()->json(['sync'=>true,'new_items'=>$new_items,'sync_items'=>$items]);
+    	}
 
-	    $lugar = new Lugar();
-	    $lugar->name = $request->name;
-	    $lugar->vecinity = $request->vecinity;
-	    $lugar->lat = $request->lat;
-	    $lugar->lng = $request->lng;
-	    $lugar->google_id = $request->place_id;
-	    $loc= qryPoint($lugar->lat,$lugar->lng);
-	    $lugar->id_0 = $loc['id_0'];
-	    $lugar->id_1 = $loc['id_1'];
-	    $lugar->id_2 = $loc['id_2'];
-	    $lugar->id_3 = $loc['id_3'];
-	    try{
-		    if($lugar->save()){
-		    	$lugar->categorias()->sync($categorias);
-		        return response()->json($lugar);
-		    }
-	    }catch(\Exception $er){
-	    	return response()->json(['lugar_store_error']);
-	    }
-	    return response()->json(['lugar_store_error']);
+	    return response()->json(['sync'=>false,'new_items'=>$new_items,'sync_items'=>[]]);
 	}
 
 	/**
@@ -106,13 +107,6 @@ class Back extends Controller
     public function store_item(Request $request,$google_id){
 
     	$categorias = $request->categorias;
-
-    	foreach ($categorias as $key => $c) {
-	    		$categoria = Categoria::firstOrNew(['categoria'=>$c]);
-	    		$categoria->categoria= $c;
-	    		$categoria->icono_url = "";
-	    		$categoria->save();
-    	}
 
 	    $lugar = Lugar::where('google_id',$google_id)->first();
 	    $lugar->name = $request->name;
@@ -137,9 +131,14 @@ class Back extends Controller
 		return response()->json($lugar);
 	}
 
+	/**
+	 * Marca como visitado un lugar
+	 * @param  Request $request [description]
+	 * @return [type]           [description]
+	 */
 	public function visited(Request $request){
 		$google_id  = $request->place_id;
-		$user_id  = $request->user_id;
+		$user_id  = Auth::user()->id;
 		$lugar = Lugar::where('google_id',$google_id)->first();
 		$lugar->user()->sync([$user_id]);
 		return response()->json($lugar);

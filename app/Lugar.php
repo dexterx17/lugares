@@ -9,7 +9,7 @@ class Lugar extends Model
     protected $table = 'lugares';
 
     protected $fillable = [
-        'name', 'direccion', 'telefono','web','google_id','lat','lng','loaded'
+       'google_id','lat','lng','loaded'
     ];
 
     /**
@@ -30,30 +30,30 @@ class Lugar extends Model
         return $this->belongsToMany('App\User');
     }
 
-    public function scopeVisited($query,$user_id){
+    public function scopeIsVisited($query,$user_id){
         $lugar_id = $this->id;
         return $query->whereIn('id',function($sq) use ($user_id,$lugar_id){
-            $sq->select('lugar_id');
-            $sq->from('lugar_user');
-            $sq->where('user_id',$user_id);
-            $sq->where('lugar_id',$lugar_id);
+            $sq->select('lugar_id')
+            ->from('lugar_user')
+            ->where('user_id',$user_id)
+            ->where('lugar_id',$lugar_id);
         });
     }
 
-    public function scopeVisitedByCategoriaProvincia($query,$user_id,$categoria_id,$provincia_id){
-        $lugar_id = $this->id;
+    public function scopeIsVisitedByCategoriaProvincia($query,$user_id,$categoria_id,$provincia_id){
+        //dd($user_id,$categoria_id,$provincia_id);
         return $query->where('id_1',$provincia_id)
-            ->whereIn('id',function($sq) use ($user_id,$lugar_id){
+            ->whereIn('id',function($sq) use ($user_id){
                 $sq->select('lugar_id');
                 $sq->from('lugar_user');
                 $sq->where('user_id',$user_id);
-                $sq->where('lugar_id',$lugar_id);
+               // $sq->where('lugar_id',$lugar_id);
             })
-            ->whereIn('id',function($sq) use ($lugar_id,$categoria_id){
+            ->whereIn('id',function($sq) use ($categoria_id){
                 $sq->select('lugar_id');
                 $sq->from('categoria_lugar');
                 $sq->where('categoria_id',$categoria_id);
-                $sq->where('lugar_id',$lugar_id);
+             //   $sq->where('lugar_id',$lugar_id);
             });
     }
 

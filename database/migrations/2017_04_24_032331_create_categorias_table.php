@@ -19,6 +19,7 @@ class CreateCategoriasTable extends Migration
             $table->text('objetivo')->nullable();
             $table->string('icono')->nullable();
             $table->integer('orden')->default(0);
+            $table->boolean('activa')->default(TRUE);
             $table->string('icono_url');
             $table->timestamps();
         });

@@ -8,41 +8,59 @@ function renderWelcome() {
     welcome.find('.stats .coins').html(Parse.User.current().get('coins'));
     welcome.find('.stats .bombs').html(Parse.User.current().get('bombs'));
 }
+
+function updatePeticiones(inc){
+    $('#n_peticiones').html(parseInt($('#n_peticiones').html())+inc);
+}
+function updatePeticionesResponses(inc){
+    $('#n_peticiones_responses').html(parseInt($('#n_peticiones').html())+inc);
+}
 /*
   Update scores of friends
 */
-function renderPlaces(places) {
-    console.log('renderPLaces');
+function renderPlace(place) {
+    console.log('renderPLace');
+    console.log(place);
     var list = $('#lugares');
     var template = $('.template-lugar');
-    for (var i = 0; i < places.length; i++) {
-        var item = template.clone().removeClass('template-lugar').addClass('media');
-        item.attr('id', places[i].place_id);
-        item.find('a').attr('href',places[i].place_id);
-        item.find('.media-heading').html(places[i].name);
-        item.find('img').attr('src',(typeof places[i].photos !== "undefined")?places[i].photos[0].getUrl({'maxWidth': 50, 'maxHeight': 50}):places[i].icon);
-        item.find('img').attr('alt',places[i].name);
-        item.find('.vicinity').html(places[i].vicinity);
-        list.append(item);
-    }
-    $('#lugares .loading').fadeOut('fast');
-    var n_lugares = parseInt($('#n_lugares').html());
-    $('#n_lugares').html(n_lugares+places.length);
+    var item = template.clone().removeClass('template-lugar').addClass('media');
+    item.attr('id', place.place_id);
+    item.find('.media-left a').attr('href',place.place_id);
+    item.find('.media-body a').attr('href',place.place_id);
+    item.find('.media-heading a').html(place.name);
+    item.find('img').attr('src',(typeof place.photos !== "undefined")?place.photos[0].getUrl({'maxWidth': 50, 'maxHeight': 50}):place.icon);
+    item.find('img').attr('alt',place.name);
+    item.find('.vicinity').html(place.vicinity);
+    list.append(item);
+}
+
+function renderUpdatePlace(place){
+    console.log('renderUpdatePLace');
+    console.log(place);
+    console.log($('#lugares #'+place.google_id).html());
+    var item = $('#'+place.google_id);
+    if(place.visited)
+        item.addClass('bg-success');
 }
 
 function renderPlaceInfo(place){
     console.log('renderPLacesInfo');
+    console.log(place);
     var contenedor = $('#detail');
     var template = $('.template-lugar-info');
     var item = template.clone().removeClass('template-lugar-info');
     if(typeof place.photos!== "undefined")
         item.find('img').attr('src',place.photos[0].getUrl({'maxWidth': 200, 'maxHeight': 250}));
-    item.find('h3').text(place.name);
+    item.find('h3').contents()[0].nodeValue = place.name;
     item.find('button.visitado').attr('place',place.place_id);
-    item.find('.direction').text(place.formatted_address);
-    item.find('.international-phone').text(place.international_phone_number);
-    item.find('.phone').text(place.formatted_phone_number);
-    item.find('.website').text(place.website);
+    if(typeof place.formatted_address!== "undefined")
+        item.find('.direction').contents()[1].nodeValue = place.formatted_address;
+    if(typeof place.international_phone_number!== "undefined")
+        item.find('.international-phone').contents()[1].nodeValue = place.international_phone_number;
+    if(typeof place.formatted_phone_number!== "undefined")
+        item.find('.phone').contents()[1].nodeValue = place.formatted_phone_number;
+    if(typeof place.website!== "undefined")
+        item.find('.website a').html(place.website);
     for (var i = 0; i < place.types.length; i++) {
         item.find('.categorias').append('<li><a href="#" >'+place.types[i]+'</a></li>');
     };
@@ -68,6 +86,22 @@ function onChangeCategoria(e) {
     setBtnIniciar();
 }
 
+function normalIcon() {
+  return {
+    url: '../../img/marker-red.png'
+  };
+}
+function visitedIcon() {
+  return {
+    url: '../../img/marker-green.png'
+  };
+}
+function highlightedIcon() {
+  return {
+    url: '../../img/marker-orange.png'
+  };
+}
+
 function onListPlaceClick(e){
     e.preventDefault();
     if($(this).hasClass('local')){
@@ -79,10 +113,17 @@ function onListPlaceClick(e){
 
 function onMarkPlace(e){
     e.preventDefault();
-    var res = confirm('Conoces este lugar?');
-    if(res){
-        mark_place($(this).attr('place'));
-    }else{
-        alert('viaja mas');
-    }
+    mark_place($(this).attr('place'));
+}
+
+function onHoverInPlace(){
+    console.log('onHoverInPlace');
+    var index = $(this).index();
+    markers[index-2].setIcon(highlightedIcon());
+}
+
+function onHoverOutPlace(){
+    console.log('onHoverOutPlace');
+    var index = $(this).index();
+    markers[index-2].setIcon(normalIcon());
 }

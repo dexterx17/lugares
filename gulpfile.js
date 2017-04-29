@@ -12,7 +12,11 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass(['app.scss','../../../node_modules/font-awesome/scss/font-awesome.scss']);
+    mix.sass([
+    	'app.scss',
+    	'../../../node_modules/font-awesome/scss/font-awesome.scss',
+    	'../../../node_modules/sweetalert/dev/sweetalert.scss'
+    	]);
 });
 
 elixir(function(mix) {
@@ -22,6 +26,7 @@ elixir(function(mix) {
 
 elixir(function(mix){
 	mix.scripts([
+		'../../../node_modules/sweetalert/dist/sweetalert.min.js',
 		'../../../node_modules/jquery-sortable/source/js/jquery-sortable-min.js',
 		'ui.js',
 		'login.js',

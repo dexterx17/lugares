@@ -40,6 +40,11 @@
                                             <th>
                                                 {{ trans('comun.lugares') }}
                                             </th>
+                                            <th>
+                                                {{ trans('comun.activo') }}
+
+                                                <span class="badge"> </span>
+                                            </th>
                                             <th class="text-right">
                                                 {{ trans('comun.acciones') }}
                                             </th>
@@ -47,7 +52,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach($categorias_data as $index=>$categoria)
-                                        <tr data-categoria="{{$categoria->categoria}}">
+                                        <tr id="{{$categoria->categoria}}" data-categoria="{{$categoria->categoria}}">
                                             <td>
                                                 <i class="fa fa-arrows movible">
                                                 </i>
@@ -63,13 +68,17 @@
                                             <td>
                                                 {{ $categoria->lugares()->count() }}
                                             </td>
+                                            <td>
+                                                <input class="form-control col-md-7 col-xs-12 desactive-category" value="1" id="activa" name="activa" @if($categoria->activa) checked="checked" @endif type="checkbox">
+                                                </input>
+                                            </td>
                                             <td class="text-right">
                                                 <a class="btn btn-info btn-xs" href="{{ route('categorias.edit',$categoria->categoria)}}">
                                                     <i class="fa fa-pencil">
                                                     </i>
                                                     {{ trans('comun.editar') }}
                                                 </a>
-                                                <a class="btn btn-danger btn-xs" href="{{route('categorias.destroy',$categoria->categoria)}}" onclick="return confirm('Seguro que deseas eliminarlo')">
+                                                <a class="btn btn-danger btn-xs delete-category" href="{{route('categorias.destroy',$categoria->categoria)}}">
                                                     <i class="fa fa-trash-o">
                                                     </i>
                                                     {{ trans('comun.eliminar') }}
@@ -79,7 +88,6 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                >
                                 <!-- end categorias list -->
                                 <!-- content ends here -->
                             </div>
@@ -96,6 +104,43 @@
 @section('js')
 <script>
     $(document).ready(function(){
+
+        $('.desactive-category').on('click',function(e){
+            //e.preventDefault();
+            var id = $(this).parents('tr').data('categoria');
+            var estado = $(this).is(':checked');
+            var datos = {'_token': '{{ Session::token() }}'};
+            if(estado)
+                datos['activa']=estado;
+
+            $.post("{{route('categorias.update','')}}/"+id,datos,function(response){
+
+            },'json');
+        });
+        $('.delete-category').on('click',function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');
+            swal({
+              title: "{{ trans('comun.estas_seguro') }}?",
+              text: "{{ trans('comun.accion_no_se_deshace') }}",
+              type: "warning",
+              html:true,
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "{{ trans('comun.eliminarlo') }}!",
+              cancelButtonText: "{{ trans('comun.cancelar') }}",
+              closeOnConfirm: false
+            },
+            function(){
+                $.get(url,function(response){
+                    if(response.categoria){
+                        $('#'+response.categoria).fadeOut('slow');
+                        swal("{{ trans('comun.eliminado') }}!", "{{ trans('comun.eliminado_ok') }}", "success");
+                    }else{
+                    }
+                },'json');
+            });
+        });
         var orden = [];
         // Sortable rows
         var group = $('ul.to_do').sortable({
@@ -135,3 +180,4 @@
         });
 </script>
 @endsection
+    

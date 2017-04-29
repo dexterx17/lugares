@@ -52,7 +52,7 @@
                         </nav>
                         <nav class="page-nav-subpages" data-icons="false,map-marker,calendar,star,image">
                             <ul>
-                                <li><a class="current" href="#"><span id="n_lugares" class="badge">{{ count($items) }}</span> {{ trans('comun.lugares_total') }}</a></li>
+                                <li><a class="current" href="#"><span id="n_lugares_total" class="badge">{{ count($items) }}</span> {{ trans('comun.lugares_total') }}</a></li>
                             </ul>
                         </nav>
                     </div><!--/limit-->
@@ -68,32 +68,17 @@
                     <div id="tabs">
                       <!-- Nav tabs -->
                       <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#lugares" aria-controls="lugares" role="tab" data-toggle="tab">{{ trans('comun.por_visitar') }} <span id="n_lugares" class="badge">{{ count($items) }}</span></a></li>
+                        <li role="presentation" class="active"><a href="#lugares" aria-controls="lugares" role="tab" data-toggle="tab">{{ trans('comun.por_visitar') }} <span id="n_lugares" class="badge">{{ count($items)-count($items_visitados) }}</span></a></li>
                         <li role="presentation"><a href="#detail" aria-controls="detail" role="tab" data-toggle="tab">Detalles</a></li>
-                        <li role="presentation"><a href="#explorados" aria-controls="explorados" role="tab" data-toggle="tab">{{ trans('comun.visitados') }} <span id="n_lugares" class="badge">{{ count($items_visitados) }}</span> </a></li>
+                        <li role="presentation"><a href="#explorados" aria-controls="explorados" role="tab" data-toggle="tab">{{ trans('comun.visitados') }} <span id="n_lugares_explorados" class="badge">{{ count($items_visitados) }}</span> </a></li>
                        </ul>
 
                       <!-- Tab panes -->
                       <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="lugares" base-url="{{ route('loader') }}" token="{{ Session::token() }}">
-                            <div class="loading">
-                                Loading...
+                            <div class="help">
+                                {{ trans('comun.desplazate_en_mapa') }}
                             </div>
-                        @foreach($items as $key=>$item)
-                            <div class="media @if($item->visited(1)->count()) bg-success @endif" id="{{ $item->google_id }}">
-                                <div class="media-left">
-                                    <a href="{{ $item->google_id }}" class="@if($item->loaded) local @endif">
-                                        <img alt="{{ $item->name }}" class="media-object" width="50" height="50" src="@if($item->imagen!="") {{ $item->imagen }} @else {{ $item->categorias()->first()->icono_url }} @endif"/>
-                                    </a>
-                                </div>
-                                <div class="media-body">
-                                    <h4 class="media-heading">
-                                        {{ $item->name }}
-                                    </h4>
-                                    {{ $item->vecinity }}
-                                </div>
-                            </div>
-                        @endforeach
                         </div>
                         <div role="tabpanel" class="tab-pane" id="detail">
                             Selecciona un <button  id="btn_lugares" title="Lugar">lugar</button>
@@ -110,7 +95,7 @@
                                 </div>
                                 <div class="media-body">
                                     <h4 class="media-heading">
-                                        name
+                                        <a href="" title="name">name</a>
                                     </h4>
                                         <span class="vicinity">dir</span>
                                 </div>
@@ -119,17 +104,17 @@
                                 <div class="panel-heading">
                                     <h3>
                                         Titi Park
-                                        <button type="button" place="" class="visitado pull-right btn btn-info">Visitado</button>
+                                        <button type="button" base-url="{{ url('visited') }}" place="" class="visitado pull-right btn btn-info">Visitado</button>
                                     </h3>
                                 </div>
                                 <div class="panel-body">
                                 <img class="img-responsive" src="#">
                                     <ul class="list-group">
-                                        <li class="list-group-item direction"><i class="glyphicon glyphicon-home"></i> Huayna Capac, Ambato 180202, Ecuador</li>
-                                        <li class="list-group-item international-phone"><i class="glyphicon glyphicon-earphone"></i> null</li>
-                                        <li class="list-group-item phone"><i class="glyphicon glyphicon-earphone"></i> null</li>
-                                        <li class="list-group-item website"><i class="glyphicon glyphicon-globe"></i> <a href="undefined">website</a></li>
-                                        <li class="list-group-item">{{ trans('comun.categorias") }}: 
+                                        <li class="list-group-item direction"><i class="glyphicon glyphicon-home"></i> {{ trans('comun.no_direction') }}</li>
+                                        <li class="list-group-item international-phone"><i class="glyphicon glyphicon-earphone"></i> {{ trans('comun.no_number') }}</li>
+                                        <li class="list-group-item phone"><i class="glyphicon glyphicon-earphone"></i> {{ trans('comun.no_number') }} </li>
+                                        <li class="list-group-item website"><i class="glyphicon glyphicon-globe"></i> <a href="#">website</a></li>
+                                        <li class="list-group-item">{{ trans('comun.categorias') }}: 
                                             <ul class="categorias">
                                             </ul>
                                         </li>
@@ -146,7 +131,10 @@
             </div>
         </div>
         <div class="panel-footer">
-            <div class="pull-left">
+            <div class="">
+                <span id="n_peticiones">0</span>
+                <span id="n_peticiones_responses">0</span>
+                |||
                 <span id="id_categoria">{{ $categoria->categoria }}</span>
                 <span class="zoom">{{ $provincia->zoom }}</span>
                 |||
@@ -157,10 +145,6 @@
                         {{ $provincia->minx }},{{ $provincia->miny }} - {{ $provincia->maxx }},{{ $provincia->maxy }}
                 </span>
             </div>
-            <hr>
-            <a href="https://developers.google.com/maps/documentation/javascript/marker-clustering" target="_blank">https://developers.google.com/maps/documentation/javascript/marker-clustering</a>
-            <br>
-            <a href="https://developers.google.com/maps/documentation/javascript/events" target="_blank">https://developers.google.com/maps/documentation/javascript/events</a>
         </div>
     </div>
 </div>
