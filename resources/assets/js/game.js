@@ -22,6 +22,8 @@ function mark_place(place_id){
             if(response.google_id){
                 $('#'+response.google_id).fadeOut('slow');
                 swal("Visitado!", "Genial, +10 puntos", "success");
+                $('#tabs a[href="#explorados"]').tab('show');
+                movePlace(response.google_id);
             }else{
 
             }
@@ -58,7 +60,7 @@ function initMap() {
     var latitud = parseFloat($('.lat').html());
     var longitud = parseFloat($('.lng').html());
     var zoom = parseFloat($('.zoom').html());
-    var radio = 2000;
+    var radio = 1000;
     var categorias = [$('#id_categoria').html()];
     console.log('lat:'+latitud);
     console.log('lng:'+longitud);
@@ -74,8 +76,8 @@ function initMap() {
             strokeColor: '#FF0000',
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: '#FF0000',
-            fillOpacity: 0.35,
+            fillColor: '#00FF00',
+            fillOpacity: 0.0,
             map: map,
             center: {lat: latitud , lng:  longitud},
             radius: radio
@@ -83,6 +85,10 @@ function initMap() {
 
     map.addListener('zoom_changed', function() {
         $('.zoom').html(map.getZoom());
+        buscar_lugares(categorias, radio);
+    });
+
+    map.addListener('dragend', function(e) {
         buscar_lugares(categorias, radio);
     });
 
@@ -119,6 +125,30 @@ function initMap() {
     buscar_lugares(categorias, radio);
 }
 
+
+function animate_circle(){
+    var opacity=0;
+    var interval = setInterval(function(){
+        circle.setOptions({
+            'fillOpacity':(opacity+=0.1),
+            'strokeColor': '#FF0000',
+            'strokeOpacity': 0.8,
+            'strokeWeight': 2,
+        });
+        console.log('opacity: '+opacity);
+    },250);
+
+    setTimeout(function(){
+        console.log('fillopacity: ');
+        circle.setOptions({
+            'fillOpacity':0,
+            'strokeColor': '#00FF00',
+            'strokeOpacity': 1,
+            'strokeWeight':3
+        });
+        clearInterval(interval);
+    }, 2500);
+}
 function detail_info(place_id){
     console.log('detail_info');
     updatePeticiones(1);
@@ -143,6 +173,7 @@ function detail_info(place_id){
 
 function buscar_lugares(categoria,radio){
     console.log('buscar_lugares');
+    animate_circle();
     var lat = parseFloat($('.lat').html());
     var lng = parseFloat($('.lng').html());
     console.log('lat: '+lat);
@@ -165,10 +196,8 @@ function buscar_lugares(categoria,radio){
             var items = [];
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 updatePeticionesResponses(1);
-                var rendered_items = 0;
                 for (var i = 0; i < places.length; i++) {
                     if(!$('#lugares .media#'+places[i].place_id).length){
-                        rendered_items++;
                         items.push({
                             place_id:places[i].place_id,
                             lat: places[i].geometry.location.lat(),
@@ -185,14 +214,14 @@ function buscar_lugares(categoria,radio){
                     items:items
                 },function(response){
                     console.log(response);
-                    for (var i = 0; i < response.sync_items.length; i++) {
-                        var item = response.sync_items[i];
-                        renderUpdatePlace(item);
-                    };
+                    setTimeout(function(){
+                        for (var i = 0; i < response.sync_items.length; i++) {
+                            var item = response.sync_items[i];
+                            renderUpdatePlace(item);
+                        };
+                    },2000)
                 });
-                $('#lugares .loading').fadeOut('fast');
-                var n_lugares = parseInt($('#n_lugares').html());
-                $('#n_lugares').html(n_lugares+rendered_items);
+                $('#lugares .loading').fadeOut('slow').remove();
             }else{
                 updatePeticionesResponses(1);
                 $('#lugares .loading').fadeOut('slow').remove();

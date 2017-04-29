@@ -53,8 +53,8 @@ $( document ).ready(function() {
 
   $( document ).on( 'click', 'button.visitado', onMarkPlace );
 
-  $( document ).on( 'mouseover', '#lugares .media', onHoverInPlace );
-  $( document ).on( 'mouseleave', '#lugares .media', onHoverOutPlace );
+  $( document ).on( 'mouseover', '#lugares .media, #visitados .media', onHoverInPlace );
+  $( document ).on( 'mouseleave', '#lugares .media, #visitados .media', onHoverOutPlace );
 
 
  // $( document ).on( 'mousedown', '#canvas', onGameCanvasMousedown );

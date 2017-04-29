@@ -42,6 +42,8 @@ class Back extends Controller
 
     public function game_provincia($categoria,$provincia)
     {
+    	//$lugar = Lugar::find(492);
+    	//dd($lugar->isVisited(Auth::user()->id)->count());
     	$categoria = Categoria::find($categoria);
     	$provincias = Provincia::where('id_0',68)->orderBy('provincia','ASC')->get();
     	$provincia = Provincia::where('id_0',68)->where('id_1',$provincia)->first();
@@ -53,10 +55,7 @@ class Back extends Controller
 
     	$this->datos['provincias']=$provincias;
 
-        $this->datos['items'] = Lugar::byCategoria($categoria->categoria)->get();
-
-        $this->datos['items_visitados'] = Lugar::isVisitedByCategoriaProvincia(Auth::user()->id,$categoria->categoria,$provincia->id_1)->get();
-        
+        $this->datos['items'] = Lugar::byCategoria($categoria->categoria)->count();
     	return view('explorar',$this->datos);
     }
 
@@ -87,7 +86,7 @@ class Back extends Controller
 				        $new_items++;
 				    }
 			    }catch(\Exception $er){
-			    	
+			    	$lugar = Lugar::where('google_id',$item['place_id'])->first();
 			    }
 			    $lugar->visited = (boolean)$lugar->isVisited(Auth::user()->id)->count();
 			    $items[]=$lugar;	

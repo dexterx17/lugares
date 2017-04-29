@@ -52,7 +52,7 @@
                         </nav>
                         <nav class="page-nav-subpages" data-icons="false,map-marker,calendar,star,image">
                             <ul>
-                                <li><a class="current" href="#"><span id="n_lugares_total" class="badge">{{ count($items) }}</span> {{ trans('comun.lugares_total') }}</a></li>
+                                <li><a class="current" href="#"><span id="n_lugares_total" class="badge">{{ $items }}</span> {{ trans('comun.lugares_total') }}</a></li>
                             </ul>
                         </nav>
                     </div><!--/limit-->
@@ -61,16 +61,16 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-md-6 col-lg-8">
                     <div id="mapa"></div>   
                 </div>
-                <div class="col-lg-4">
+                <div class="col-md-6 col-lg-4">
                     <div id="tabs">
                       <!-- Nav tabs -->
                       <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#lugares" aria-controls="lugares" role="tab" data-toggle="tab">{{ trans('comun.por_visitar') }} <span id="n_lugares" class="badge">{{ count($items)-count($items_visitados) }}</span></a></li>
+                        <li role="presentation" class="active"><a href="#lugares" aria-controls="lugares" role="tab" data-toggle="tab">{{ trans('comun.por_visitar') }} <span id="n_lugares" class="badge">0</span></a></li>
                         <li role="presentation"><a href="#detail" aria-controls="detail" role="tab" data-toggle="tab">Detalles</a></li>
-                        <li role="presentation"><a href="#explorados" aria-controls="explorados" role="tab" data-toggle="tab">{{ trans('comun.visitados') }} <span id="n_lugares_explorados" class="badge">{{ count($items_visitados) }}</span> </a></li>
+                        <li role="presentation"><a href="#explorados" aria-controls="explorados" role="tab" data-toggle="tab">{{ trans('comun.visitados') }} <span id="n_lugares_explorados" class="badge">0</span> </a></li>
                        </ul>
 
                       <!-- Tab panes -->
