@@ -15,7 +15,7 @@
     @yield('css')
 
 </head>
-<body id="app-layout">
+<body id="app-layout" base-url="{{ url('/') }}" >
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-xs-12 user-stats">

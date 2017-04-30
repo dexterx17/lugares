@@ -28,7 +28,7 @@
                                         @foreach($provincias as $prov)
                                             @if($provincia->id!=$prov->id)
                                                 <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
-                                                    <a itemprop="item" href="{{route('game.provincia',['provincia'=>$prov->id_1,'categoria'=>$categoria->categoria])}}">
+                                                    <a itemprop="item" href="{{route('game.provincia',[ 'pais' => $prov->id_0, 'provincia'=>$prov->id_1,'categoria'=>$categoria->categoria])}}">
                                                         <span itemprop="name"> {{ $prov->provincia }}</span>
                                                     </a>
                                                 </li>
@@ -45,7 +45,7 @@
                                         @foreach($categorias as $cat)
                                             @if($categoria->categoria!=$cat->categoria)
                                                 <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
-                                                    <a itemprop="item" href="{{route('game.provincia',[$cat->categoria,$provincia->id_1])}}">
+                                                    <a itemprop="item" href="{{route('game.provincia',['categoria'=>$cat->categoria,'pais'=>$provincia->id_0, 'provincia'=>$provincia->id_1])}}">
                                                         <span itemprop="name"> {{ $cat->nombre }}</span>
                                                     </a>
                                                 </li>

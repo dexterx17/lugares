@@ -50,13 +50,13 @@ class Back extends Controller
         return view('inicio',$this->datos);
     }
 
-    public function game_provincia($categoria,$provincia)
+    public function game_provincia($categoria,$pais,$provincia)
     {
     	//$lugar = Lugar::find(492);
     	//dd($lugar->isVisited(Auth::user()->id)->count());
     	$categoria = Categoria::find($categoria);
-    	$provincias = Provincia::where('id_0',68)->orderBy('provincia','ASC')->get();
-    	$provincia = Provincia::where('id_0',68)->where('id_1',$provincia)->first();
+    	$provincias = Provincia::where('id_0',$pais)->orderBy('provincia','ASC')->get();
+    	$provincia = Provincia::where('id_0',$pais)->where('id_1',$provincia)->first();
 
 
     	$this->datos['categorias'] = Categoria::where('activa',1)->orderBy('categoria','ASC')->get();

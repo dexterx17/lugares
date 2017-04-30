@@ -55,8 +55,9 @@
                         <div class="form-group">
                             <label for="categoria">{{ trans('comun.selecciona_categoria') }}</label>
                             {!! Form::select('categoria',$categorias,'',['id'=>"select_categoria",'required'=>'required','class'=>'form-control']) !!}
+                            <input type="hidden" value="{{ $pais->id_0 }}" id="pais_id">   
                         </div>
-                        <a id="btnIniciar" base-url="{{ route('game') }}" href="{{ route('game.provincia',['categoria'=>'bank','provincia'=>20]) }}" type="button" class="btn btn-primary btn-lg btn-block">{{ trans('comun.iniciar') }}</a>
+                        <a id="btnIniciar" base-url="{{ route('game') }}" href="{{ route('game.provincia',['categoria'=>'bank','pais'=>68,'provincia'=>20]) }}" type="button" class="btn btn-primary btn-lg btn-block">{{ trans('comun.iniciar') }}</a>
                     </form>
                 </div>
             </div>

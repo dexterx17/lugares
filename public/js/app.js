@@ -110,9 +110,10 @@ function renderPlaceInfo(place){
 
 function setBtnIniciar() {
     var url = $('#btnIniciar').attr('base-url');
+    var pais_id = $('#pais_id').val();
     var provincia_id = $('#select_provincia').val();
     var categoria_id = $('#select_categoria').val();
-    url += '/' + categoria_id + '/' + provincia_id;
+    url += '/' + categoria_id + '/'+ pais_id +'/' + provincia_id;
     $('#btnIniciar').attr('href', url);
     $('#provincia_categoria_seleccionada').html(url);
 }
@@ -126,20 +127,21 @@ function onChangeCategoria(e) {
     e.preventDefault();
     setBtnIniciar();
 }
+var base_url = $('body').attr('base-url');
 
 function normalIcon() {
   return {
-    url: '../../img/marker-red.png'
+    url: base_url+'/img/marker-red.png'
   };
 }
 function visitedIcon() {
   return {
-    url: '../../img/marker-green.png'
+    url: base_url+'/img/marker-green.png'
   };
 }
 function highlightedIcon() {
   return {
-    url: '../../img/marker-orange.png'
+    url: base_url+'/img/marker-orange.png'
   };
 }
 

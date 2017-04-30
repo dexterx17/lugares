@@ -32,7 +32,7 @@ Route::group(['middleware'=>'auth'],function(){
 		'uses'=>'Back@game',
 		'as'=>'game'
 	]);
-	Route::get('/game/{categoria}/{provincia}', [
+	Route::get('/game/{categoria}/{pais}/{provincia}', [
 		'uses'=>'Back@game_provincia',
 		'as'=>'game.provincia'
 	]);
