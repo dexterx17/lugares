@@ -29,6 +29,10 @@ class Canton extends Model
         ->where('id_1',$provincia_id);
     }
 
+    public function scopeLugares(){
+        return Lugar::where('id_0',$this->id_0)->where('id_1',$this->id_1)->where('id_2',$this->id_2);
+    }
+
     /**
      * Provincia a la que pertenece el canton
      * @return App/Provincia Objeto de tipo Provincia

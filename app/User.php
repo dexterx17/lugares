@@ -31,4 +31,15 @@ class User extends Authenticatable
     public function lugares(){
         return $this->belongsToMany('App\Lugar');
     }
+
+    public function getPuntos(){
+        $items = \DB::table('lugar_user')
+                ->where('user_id',$this->id)->count();
+
+        return $items*10;
+    }
+
+    public function getNivel(){
+        return 1;
+    }
 }

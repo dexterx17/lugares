@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
         factory(User::class)->create([
             'name'=>'test',
             'email'=>'test@test.com',
-            'password'=>bcrypt('12345')
+            'password'=>bcrypt('12345'),
+            'type' => 'superadmin'
         ]);
         $this->call(CategoriasSeeder::class);
     }

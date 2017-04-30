@@ -16,55 +16,55 @@
 
 </head>
 <body id="app-layout">
-    <nav class="navbar navbar-default navbar-static-top">
-        <div class="container">
-            <div class="navbar-header">
-
-                <!-- Collapsed Hamburger -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                    <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-                <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ trans('comun.app_name') }}
-                </a>
-            </div>
-
-            <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                <!--    <li><a href="{{ url('/game') }}">{{ trans('comun.explorar') }}</a></li> -->
-                    <li><a href="{{ url('/categorias') }}">{{ trans('comun.categorias') }}</a></li>
-                    <li><a href="{{ url('/paises') }}">{{ trans('comun.paises') }}</a></li>
-                </ul>
-
-                <!-- Right Side Of Navbar -->
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Authentication Links -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-xs-12 user-stats">
+                <div class="well">
+                    <h5>
+                        <strong>{{ trans('comun.username') }}: </strong> {{ (Auth::guest())? trans('comun.invitado'): Auth::user()->name }} <span class="pull-right label label-info">{{ (Auth::guest())? trans('comun.explorer'): Auth::user()->type }}</span> 
+                    </h5>
+                    <h5>
+                        <strong>{{ trans('comun.nivel') }}: </strong> {{ (Auth::guest())? 0 : Auth::user()->getNivel() }}
+                    </h5>
+                    <h5>
+                        <strong>{{ trans('comun.monedas') }}: </strong>0
+                    </h5>
+                    <h5>
+                        <strong>{{ trans('comun.puntos') }}: </strong> {{ (Auth::guest())? 0 : Auth::user()->getPuntos() }}
+                    </h5>
+                    <hr />
+                    <h5>
                     @if (Auth::guest())
-                        <li><a href="{{ url('/login') }}">{{ trans('comun.iniciar_sesion') }}</a></li>
-                        <li><a href="{{ url('/register') }}">{{ trans('comun.registrate') }}</a></li>
+                        <a href="{{ url('/login') }}" class="pull-left">{{ trans('comun.iniciar_sesion') }}</a>
+                        <a href="{{ url('/register') }}" class="pull-right">{{ trans('comun.registrate') }}</a>
+                        <div class="clearfix"></div>
                     @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                            </ul>
-                        </li>
+                        <a href="#" class="pull-left">{{ trans('comun.estadisticas') }}</a>
+                        <a href="{{ url('/logout') }}" class="pull-right"><i class="fa fa-btn fa-sign-out"></i>Logout</a>
+                        <div class="clearfix"></div>
                     @endif
-                </ul>
+                    </h5>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-12 text-center page-header">
+                <h1 class="game-name">
+                    <small>@yield('country')</small>
+                    <a href="{{ url('/') }}" title="{{ trans('comun.app_name') }}">{{ trans('comun.app_name') }}</a>
+                    <small>{{ trans('comun.slogan') }}</small>    
+                </h1>   
+            </div>
+            <div class="col-md-3 col-xs-12 user-stats text-center">
+                @yield('mini_stats')
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+
+                </div>
             </div>
         </div>
-    </nav>
 
-    @yield('content')
+        @yield('content')
+    </div>
 
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" crossorigin="anonymous"></script>

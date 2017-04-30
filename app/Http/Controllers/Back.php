@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Lugar;
+use App\Pais;
 use App\Provincia;
 use App\Categoria;
 use App\User;
@@ -19,9 +20,11 @@ class Back extends Controller
 
 	public function __construct(){
         include_once(app_path() . '/Libraries/Mapserver.php');
+		$this->datos['total_categorias'] = Categoria::where('activa',1)->count();
     }
 
 	public function index(){
+		$this->datos['total_lugares'] = Lugar::count();
 		if(Auth::user())
 			return redirect()->route('game');
 		return view('welcome',$this->datos);
@@ -32,11 +35,16 @@ class Back extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function game()
+    public function game($pais_id=68)
     {
+    	$pais = Pais::find($pais_id);
+    	$paises = Pais::orderBy('pais','ASC')->get();
+    	$this->datos['items'] = Lugar::byPais($pais_id)->count();
+    	$this->datos['pais'] = $pais;
+    	$this->datos['paises'] = $paises;
         $this->datos['categorias'] = Categoria::where('activa',1)->orderBy('nombre','ASC')->get()->lists('nombre','categoria');
         
-        $this->datos['provincias'] = Provincia::byPais(68)->orderBy('provincia','ASC')->get()->lists('provincia','id_1');
+        $this->datos['provincias'] = Provincia::byPais($pais_id)->orderBy('provincia','ASC')->get()->lists('provincia','id_1');
             
         
         return view('inicio',$this->datos);
@@ -57,7 +65,7 @@ class Back extends Controller
 
     	$this->datos['provincias']=$provincias;
 
-        $this->datos['items'] = Lugar::byCategoria($categoria->categoria)->count();
+        $this->datos['items'] = Lugar::byCategoriaProvincia($categoria->categoria,$provincia)->count();
     	return view('explorar',$this->datos);
     }
 
@@ -84,12 +92,12 @@ class Back extends Controller
 			    $lugar->id_3 = $loc['id_3'];
 			    try{
 				    if($lugar->save()){
-				    	$lugar->categorias()->sync($categorias);
 				        $new_items++;
 				    }
 			    }catch(\Exception $er){
 			    	$lugar = Lugar::where('google_id',$item['place_id'])->first();
 			    }
+				$lugar->categorias()->sync($categorias);
 			    $lugar->visited = (boolean)$lugar->isVisited(Auth::user()->id)->count();
 			    $items[]=$lugar;	
     		}

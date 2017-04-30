@@ -1,6 +1,13 @@
 @extends('layouts.app')
 
+@section('country',$provincia->pais->pais)
+
 @section('title',$provincia->provincia.' - '.$categoria->nombre)
+
+@section('mini_stats')
+    @include('layouts.mini_stats',['total_lugares'=>$items,'total_categorias'=>$total_categorias])
+@endsection
+
 @section('content')
 <div class="container">
     <div id="fb-root"></div>

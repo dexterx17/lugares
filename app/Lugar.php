@@ -64,4 +64,18 @@ class Lugar extends Model
             $q->where('categoria_id',$categoria);
         });
     }
+
+    public function scopeByPais($query, $pais){
+        return $query->where('id_0',$pais);
+    }
+
+    public function scopeByCategoriaProvincia($query, $categoria, $provincia){
+        return $query->where('id_0',$provincia->id_0)
+            ->where('id_1',$provincia->id_1)
+            ->whereIn('id',function($q) use ($categoria) {
+            $q->select('lugar_id');
+            $q->from('categoria_lugar');
+            $q->where('categoria_id',$categoria);
+        });
+    }
 }

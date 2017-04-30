@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title',trans('comun.provincias').' '.$pais->pais.' admin')
+@section('title',trans('comun.cantones').' '.$provincia->provincia.' admin')
 
 @section('content')
 <div class="container body">
@@ -14,8 +14,8 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2>
-                                    {{ trans('comun.provincias') }}
-                                    {{ $pais->pais }}
+                                    {{ trans('comun.cantones') }}
+                                    {{ $provincia->provincia }}
                                     <small>
                                         {{ trans('comun.listado') }}
                                     </small>
@@ -25,7 +25,7 @@
                             </div>
                             <div class="x_content">
                                 <!-- content starts here -->
-                                <!-- start provincias list -->
+                                <!-- start cantones list -->
                                 <table class="table table-responsive table-hover">
                                     <thead>
                                         <tr>
@@ -33,12 +33,12 @@
                                                 #
                                             </th>
                                             <th>
-                                                {{ trans('comun.provincia') }}
+                                                {{ trans('comun.canton') }}
                                             </th>
                                             <th>
                                                 {{ trans('comun.lugares') }}
                                                 <span class="badge">
-                                                    {{ $pais->lugares()->count()}}
+                                                    {{ $provincia->lugares()->count()}}
                                                 </span>
                                             </th>
                                             <th>
@@ -50,27 +50,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($provincias_data as $index=>$provincia)
-                                        <tr id="{{$provincia->id}}" data-categoria="{{$provincia->id}}">
+                                        @foreach($cantones_data as $index=>$canton)
+                                        <tr id="{{$canton->id}}" data-categoria="{{$canton->id}}">
                                             <td>
-                                                {{ ($provincia->id_1) }}
+                                                {{ ($canton->id_1) }}
                                             </td>
                                             <td>
                                                 <a>
-                                                    {{ $provincia->provincia }}
+                                                    {{ $canton->canton }}
                                                 </a>
                                                 <span class="pull-right">
-                                                    <a href="{{ route('cantones.index',$provincia->id) }}" title="Cantones">Cantones</a>
+                                                    <a href="#" title="Cantones">Cantones</a>
                                                 </span>
                                             </td>
                                             <td>
-                                                {{ $provincia->lugares()->count() }}
+                                                {{ $canton->lugares()->count() }}
                                             </td>
                                             <td>
-                                                {{ $provincia->zoom }}
+                                                {{ $canton->zoom }}
                                             </td>
                                             <td class="text-right">
-                                                <a class="btn btn-info btn-xs" href="{{ route('provincias.edit',$provincia->id)}}">
+                                                <a class="btn btn-info btn-xs" href="{{ route('cantones.edit',$canton->id)}}">
                                                     <i class="fa fa-pencil">
                                                     </i>
                                                     {{ trans('comun.editar') }}
@@ -80,7 +80,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <!-- end provincias list -->
+                                <!-- end cantones list -->
                                 <!-- content ends here -->
                             </div>
                         </div>

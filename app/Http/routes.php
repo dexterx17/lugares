@@ -28,7 +28,7 @@ Route::get('auth/{provider}', 'Auth\AuthController@redirectToProvider');
 Route::get('auth/{provider}/callback', 'Auth\AuthController@handleProviderCallback');
 
 Route::group(['middleware'=>'auth'],function(){
-	Route::get('/game', [
+	Route::get('/game/{pais_id?}', [
 		'uses'=>'Back@game',
 		'as'=>'game'
 	]);
@@ -76,6 +76,16 @@ Route::group(['middleware'=>'auth'],function(){
 	Route::post('provincias/{provincia_id}',[
 		'uses' =>'Provincias@update',
 		'as'=>'provincias.update'
+	]);
+	/* rutas CANTONES */
+	Route::get('provincia/{provincia_id}/cantones',[
+		'uses' => 'Cantones@index',
+		'as' => 'cantones.index'
+	]);
+	Route::resource('cantones','Cantones',['except'=>['index','create','store','destroy','show']]);
+	Route::post('cantones/{canton_id}',[
+		'uses' =>'Cantones@update',
+		'as'=>'cantones.update'
 	]);
 
 });

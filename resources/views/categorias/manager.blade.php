@@ -39,6 +39,9 @@
                                             </th>
                                             <th>
                                                 {{ trans('comun.lugares') }}
+                                                <span class="badge">
+                                                    {{ App\Lugar::count() }}
+                                                </span>
                                             </th>
                                             <th>
                                                 {{ trans('comun.activo') }}
