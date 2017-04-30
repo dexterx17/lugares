@@ -55,12 +55,12 @@ var map;
 var infoWindow;
 var cicle;
 var markers = [];
+var radio = 1000;
 function initMap() {
     console.log('initMap');
     var latitud = parseFloat($('.lat').html());
     var longitud = parseFloat($('.lng').html());
     var zoom = parseFloat($('.zoom').html());
-    var radio = 1000;
     var categorias = [$('#id_categoria').html()];
     console.log('lat:'+latitud);
     console.log('lng:'+longitud);
@@ -79,26 +79,46 @@ function initMap() {
             fillColor: '#00FF00',
             fillOpacity: 0.0,
             map: map,
+            draggable:true,
             center: {lat: latitud , lng:  longitud},
             radius: radio
     });
 
     map.addListener('zoom_changed', function() {
         $('.zoom').html(map.getZoom());
+        if(map.getZoom()<15){
+            console.log('radio 10000');
+            radio=1000;
+            circle.setRadius(radio);
+        }else if((map.getZoom()>=15) && (map.getZoom()<17)){
+            console.log('radio 500');
+            radio=500;
+            circle.setRadius(radio);
+        }else if((map.getZoom()>=17) && (map.getZoom()<20)){
+            console.log('radio 200');
+            radio=200;
+            circle.setRadius(radio);
+        }else{
+            console.log('radio 100');
+            radio=100;
+            circle.setRadius(radio);
+        }
         buscar_lugares(categorias, radio);
     });
 
-    map.addListener('dragend', function(e) {
+    circle.addListener('dragend', function(e) {
+        console.log('dragned circle');
+        console.log(e);
         buscar_lugares(categorias, radio);
     });
 
-    map.addListener('bounds_changed', function(e) {
+    circle.addListener('center_changed', function(e) {
         var bounds =map.getBounds(); 
-        var centro =map.getCenter();
+        var centro =circle.getCenter();
         $('.bounds').html(bounds.b.b+' , '+bounds.b.f+'  ::  '+bounds.f.b+' , '+bounds.f.f);
         $('.lat').html(centro.lat());
         $('.lng').html(centro.lng());
-        circle.setCenter(map.getCenter());
+       // circle.setCenter(centro);
     });
 
     infoWindow = new google.maps.InfoWindow();
@@ -135,7 +155,7 @@ function animate_circle(){
             'strokeOpacity': 0.8,
             'strokeWeight': 2,
         });
-        console.log('opacity: '+opacity);
+      //  console.log('opacity: '+opacity);
     },250);
 
     setTimeout(function(){
@@ -174,10 +194,6 @@ function detail_info(place_id){
 function buscar_lugares(categoria,radio){
     console.log('buscar_lugares');
     animate_circle();
-    var lat = parseFloat($('.lat').html());
-    var lng = parseFloat($('.lng').html());
-    console.log('lat: '+lat);
-    console.log('lng: '+lng);
     console.log('categoria: ');
     console.log(categoria);
     console.log('radio: '+radio);
@@ -185,8 +201,8 @@ function buscar_lugares(categoria,radio){
     updatePeticiones(1);
     var service = new google.maps.places.PlacesService(map);
         service.nearbySearch({
-          location: {lat: lat , lng: lng},
-          radius: radio,
+          location: circle.getCenter(),
+          radius: circle.getRadius(),
           type: categoria
     }, function callback_lugares(places, status) {
         console.log('places');
@@ -214,6 +230,7 @@ function buscar_lugares(categoria,radio){
                     items:items
                 },function(response){
                     console.log(response);
+                    $('#n_lugares_total').html(parseInt($('#n_lugares_total').html())+response.new_items);
                     setTimeout(function(){
                         for (var i = 0; i < response.sync_items.length; i++) {
                             var item = response.sync_items[i];
@@ -231,7 +248,7 @@ function buscar_lugares(categoria,radio){
 
 function createMarker(place,timeout) {
     window.setTimeout(function() {
-        renderPlace(place);
+        renderPlace(place,(markers.length)+1);
         var placeLoc = place.geometry.location;
         var marker = new google.maps.Marker({
             map: map,

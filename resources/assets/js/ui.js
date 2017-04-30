@@ -18,13 +18,15 @@ function updatePeticionesResponses(inc){
 /*
   Update scores of friends
 */
-function renderPlace(place) {
+function renderPlace(place,marker_index) {
     console.log('renderPLace');
     console.log(place);
+    var n_lugares = parseInt($('#n_lugares').html())+1;
     var list = $('#lugares');
     var template = $('.template-lugar');
     var item = template.clone().removeClass('template-lugar').addClass('media');
     item.attr('id', place.place_id);
+    item.attr('marker-index', marker_index );
     item.find('.media-left a').attr('href',place.place_id);
     item.find('.media-body a').attr('href',place.place_id);
     item.find('.media-heading a').html(place.name);
@@ -32,8 +34,7 @@ function renderPlace(place) {
     item.find('img').attr('alt',place.name);
     item.find('.vicinity').html(place.place_id);
     list.append(item);
-    var n_lugares = parseInt($('#n_lugares').html());
-    $('#n_lugares').html(n_lugares+1);
+    $('#n_lugares').html(n_lugares);
 }
 
 function renderUpdatePlace(place){
@@ -49,12 +50,14 @@ function movePlace(place_id){
     var original = $('#lugares').find('#'+place_id);
     var item = original.clone();
     original.fadeOut('slow').remove();
-    item.addClass('bg-success');
-    $(item).hide().appendTo("#explorados").fadeIn('slow');
-    var n_lugares = parseInt($('#n_lugares_explorados').html());
-    $('#n_lugares_explorados').html(n_lugares+1);
-    //$('#explorados').append(item);
+    if(!$('#explorados .media#'+place_id).length){
+        item.addClass('bg-success');
+        $(item).hide().appendTo("#explorados").fadeIn('slow');
+        $('#n_lugares_explorados').html(parseInt($('#n_lugares_explorados').html())+1);
+        $('#n_lugares').html(parseInt($('#n_lugares').html())-1);
+    }
 }
+
 function renderPlaceInfo(place){
     console.log('renderPLacesInfo');
     console.log(place);
@@ -71,8 +74,10 @@ function renderPlaceInfo(place){
         item.find('.international-phone').contents()[1].nodeValue = place.international_phone_number;
     if(typeof place.formatted_phone_number!== "undefined")
         item.find('.phone').contents()[1].nodeValue = place.formatted_phone_number;
-    if(typeof place.website!== "undefined")
+    if(typeof place.website!== "undefined"){
         item.find('.website a').html(place.website);
+        item.find('.website a').attr('href',place.website);
+    }
     for (var i = 0; i < place.types.length; i++) {
         item.find('.categorias').append('<li><a href="#" >'+place.types[i]+'</a></li>');
     };

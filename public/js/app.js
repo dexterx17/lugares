@@ -39,13 +39,15 @@ function updatePeticionesResponses(inc){
 /*
   Update scores of friends
 */
-function renderPlace(place) {
+function renderPlace(place,marker_index) {
     console.log('renderPLace');
     console.log(place);
+    var n_lugares = parseInt($('#n_lugares').html())+1;
     var list = $('#lugares');
     var template = $('.template-lugar');
     var item = template.clone().removeClass('template-lugar').addClass('media');
     item.attr('id', place.place_id);
+    item.attr('marker-index', marker_index );
     item.find('.media-left a').attr('href',place.place_id);
     item.find('.media-body a').attr('href',place.place_id);
     item.find('.media-heading a').html(place.name);
@@ -53,8 +55,7 @@ function renderPlace(place) {
     item.find('img').attr('alt',place.name);
     item.find('.vicinity').html(place.place_id);
     list.append(item);
-    var n_lugares = parseInt($('#n_lugares').html());
-    $('#n_lugares').html(n_lugares+1);
+    $('#n_lugares').html(n_lugares);
 }
 
 function renderUpdatePlace(place){
@@ -70,12 +71,14 @@ function movePlace(place_id){
     var original = $('#lugares').find('#'+place_id);
     var item = original.clone();
     original.fadeOut('slow').remove();
-    item.addClass('bg-success');
-    $(item).hide().appendTo("#explorados").fadeIn('slow');
-    var n_lugares = parseInt($('#n_lugares_explorados').html());
-    $('#n_lugares_explorados').html(n_lugares+1);
-    //$('#explorados').append(item);
+    if(!$('#explorados .media#'+place_id).length){
+        item.addClass('bg-success');
+        $(item).hide().appendTo("#explorados").fadeIn('slow');
+        $('#n_lugares_explorados').html(parseInt($('#n_lugares_explorados').html())+1);
+        $('#n_lugares').html(parseInt($('#n_lugares').html())-1);
+    }
 }
+
 function renderPlaceInfo(place){
     console.log('renderPLacesInfo');
     console.log(place);
@@ -92,8 +95,10 @@ function renderPlaceInfo(place){
         item.find('.international-phone').contents()[1].nodeValue = place.international_phone_number;
     if(typeof place.formatted_phone_number!== "undefined")
         item.find('.phone').contents()[1].nodeValue = place.formatted_phone_number;
-    if(typeof place.website!== "undefined")
+    if(typeof place.website!== "undefined"){
         item.find('.website a').html(place.website);
+        item.find('.website a').attr('href',place.website);
+    }
     for (var i = 0; i < place.types.length; i++) {
         item.find('.categorias').append('<li><a href="#" >'+place.types[i]+'</a></li>');
     };
@@ -216,12 +221,12 @@ var map;
 var infoWindow;
 var cicle;
 var markers = [];
+var radio = 1000;
 function initMap() {
     console.log('initMap');
     var latitud = parseFloat($('.lat').html());
     var longitud = parseFloat($('.lng').html());
     var zoom = parseFloat($('.zoom').html());
-    var radio = 1000;
     var categorias = [$('#id_categoria').html()];
     console.log('lat:'+latitud);
     console.log('lng:'+longitud);
@@ -240,26 +245,46 @@ function initMap() {
             fillColor: '#00FF00',
             fillOpacity: 0.0,
             map: map,
+            draggable:true,
             center: {lat: latitud , lng:  longitud},
             radius: radio
     });
 
     map.addListener('zoom_changed', function() {
         $('.zoom').html(map.getZoom());
+        if(map.getZoom()<15){
+            console.log('radio 10000');
+            radio=1000;
+            circle.setRadius(radio);
+        }else if((map.getZoom()>=15) && (map.getZoom()<17)){
+            console.log('radio 500');
+            radio=500;
+            circle.setRadius(radio);
+        }else if((map.getZoom()>=17) && (map.getZoom()<20)){
+            console.log('radio 250');
+            radio=250;
+            circle.setRadius(radio);
+        }else{
+            console.log('radio 125');
+            radio=125;
+            circle.setRadius(radio);
+        }
         buscar_lugares(categorias, radio);
     });
 
-    map.addListener('dragend', function(e) {
+    circle.addListener('dragend', function(e) {
+        console.log('dragned circle');
+        console.log(e);
         buscar_lugares(categorias, radio);
     });
 
-    map.addListener('bounds_changed', function(e) {
+    circle.addListener('center_changed', function(e) {
         var bounds =map.getBounds(); 
-        var centro =map.getCenter();
+        var centro =circle.getCenter();
         $('.bounds').html(bounds.b.b+' , '+bounds.b.f+'  ::  '+bounds.f.b+' , '+bounds.f.f);
         $('.lat').html(centro.lat());
         $('.lng').html(centro.lng());
-        circle.setCenter(map.getCenter());
+       // circle.setCenter(centro);
     });
 
     infoWindow = new google.maps.InfoWindow();
@@ -296,7 +321,7 @@ function animate_circle(){
             'strokeOpacity': 0.8,
             'strokeWeight': 2,
         });
-        console.log('opacity: '+opacity);
+      //  console.log('opacity: '+opacity);
     },250);
 
     setTimeout(function(){
@@ -335,10 +360,6 @@ function detail_info(place_id){
 function buscar_lugares(categoria,radio){
     console.log('buscar_lugares');
     animate_circle();
-    var lat = parseFloat($('.lat').html());
-    var lng = parseFloat($('.lng').html());
-    console.log('lat: '+lat);
-    console.log('lng: '+lng);
     console.log('categoria: ');
     console.log(categoria);
     console.log('radio: '+radio);
@@ -346,8 +367,8 @@ function buscar_lugares(categoria,radio){
     updatePeticiones(1);
     var service = new google.maps.places.PlacesService(map);
         service.nearbySearch({
-          location: {lat: lat , lng: lng},
-          radius: radio,
+          location: circle.getCenter(),
+          radius: circle.getRadius(),
           type: categoria
     }, function callback_lugares(places, status) {
         console.log('places');
@@ -375,6 +396,7 @@ function buscar_lugares(categoria,radio){
                     items:items
                 },function(response){
                     console.log(response);
+                    $('#n_lugares_total').html(parseInt($('#n_lugares_total').html())+response.new_items);
                     setTimeout(function(){
                         for (var i = 0; i < response.sync_items.length; i++) {
                             var item = response.sync_items[i];
@@ -392,7 +414,7 @@ function buscar_lugares(categoria,radio){
 
 function createMarker(place,timeout) {
     window.setTimeout(function() {
-        renderPlace(place);
+        renderPlace(place,(markers.length)+1);
         var placeLoc = place.geometry.location;
         var marker = new google.maps.Marker({
             map: map,

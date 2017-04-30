@@ -22,6 +22,8 @@ class Back extends Controller
     }
 
 	public function index(){
+		if(Auth::user())
+			return redirect()->route('game');
 		return view('welcome',$this->datos);
 	}
 
@@ -32,7 +34,7 @@ class Back extends Controller
      */
     public function game()
     {
-        $this->datos['categorias'] = Categoria::where('activa',1)->orderBy('categoria','ASC')->get()->lists('nombre','categoria');
+        $this->datos['categorias'] = Categoria::where('activa',1)->orderBy('nombre','ASC')->get()->lists('nombre','categoria');
         
         $this->datos['provincias'] = Provincia::byPais(68)->orderBy('provincia','ASC')->get()->lists('provincia','id_1');
             
