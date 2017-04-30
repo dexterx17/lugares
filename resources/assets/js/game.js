@@ -169,6 +169,7 @@ function animate_circle(){
         });
         clearInterval(interval);
     }, 2500);
+    
 }
 function detail_info(place_id){
     console.log('detail_info');

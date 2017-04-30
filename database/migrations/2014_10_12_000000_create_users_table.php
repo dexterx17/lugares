@@ -20,8 +20,8 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->string('pais')->nullable();
             $table->enum('type',['superadmin','admin','player'])->default('player');
-            $table->string('provider');
-            $table->string('provider_id')->unique();
+            $table->string('provider')->nullable();
+            $table->string('provider_id')->unique()->nullable();
 
             $table->string('facebook_id')->nullable();
             $table->string('google_id')->nullable();
