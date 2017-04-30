@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title',trans('comun.paises').' admin')
+@section('title',trans('comun.provincias').' '.$pais->pais.' admin')
 
 @section('content')
 <div class="container body">
@@ -14,7 +14,8 @@
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2>
-                                    {{ trans('comun.paises') }}
+                                    {{ trans('comun.provincias') }}
+                                    {{ $pais->pais }}
                                     <small>
                                         {{ trans('comun.listado') }}
                                     </small>
@@ -24,7 +25,7 @@
                             </div>
                             <div class="x_content">
                                 <!-- content starts here -->
-                                <!-- start paises list -->
+                                <!-- start provincias list -->
                                 <table class="table table-responsive table-hover">
                                     <thead>
                                         <tr>
@@ -32,7 +33,7 @@
                                                 #
                                             </th>
                                             <th>
-                                                {{ trans('comun.pais') }}
+                                                {{ trans('comun.provincia') }}
                                             </th>
                                             <th>
                                                 {{ trans('comun.lugares') }}
@@ -46,27 +47,27 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($paises_data as $index=>$pais)
-                                        <tr id="{{$pais->id}}" data-categoria="{{$pais->id}}">
+                                        @foreach($provincias_data as $index=>$provincia)
+                                        <tr id="{{$provincia->id}}" data-categoria="{{$provincia->id}}">
                                             <td>
-                                                {{ ($pais->id_0) }}
+                                                {{ ($provincia->id_1) }}
                                             </td>
                                             <td>
                                                 <a>
-                                                    {{ $pais->pais }}
+                                                    {{ $provincia->provincia }}
                                                 </a>
                                                 <span class="pull-right">
-                                                    <a href="{{ route('provincias.index',$pais->id_0) }}" title="Provincias">Provincias</a>
+                                                    <a href="#" title="Cantones">Cantones</a>
                                                 </span>
                                             </td>
                                             <td>
-                                                {{ $pais->lugares()->count() }}
+                                                {{ $provincia->lugares()->count() }}
                                             </td>
                                             <td>
-                                                {{ $pais->zoom }}
+                                                {{ $provincia->zoom }}
                                             </td>
                                             <td class="text-right">
-                                                <a class="btn btn-info btn-xs" href="{{ route('paises.edit',$pais->id)}}">
+                                                <a class="btn btn-info btn-xs" href="{{ route('provincias.edit',$provincia->id)}}">
                                                     <i class="fa fa-pencil">
                                                     </i>
                                                     {{ trans('comun.editar') }}
@@ -76,7 +77,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <!-- end paises list -->
+                                <!-- end provincias list -->
                                 <!-- content ends here -->
                             </div>
                         </div>

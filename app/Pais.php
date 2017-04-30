@@ -4,6 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Lugar;
+
 class Pais extends Model
 {
     protected $connection = 'pgsql';
@@ -20,5 +22,9 @@ class Pais extends Model
 
     public function provincias(){
     	return $this->hasMany('App\Provincia');
+    }
+
+    public function scopeLugares(){
+        return Lugar::where('id_0',$this->id_0);
     }
 }

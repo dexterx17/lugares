@@ -46,7 +46,7 @@ Route::group(['middleware'=>'auth'],function(){
 
 	Route::post('/visited','Back@visited');
 
-		/* rutas CATEGORIAS */
+	/* rutas CATEGORIAS */
 	Route::resource('categorias','Categorias',['except'=>['destroy','show']]);
 	Route::post('categorias/{actividad_id}',[
 		'uses' =>'Categorias@update',
@@ -60,6 +60,23 @@ Route::group(['middleware'=>'auth'],function(){
 		'uses'=>'Categorias@reordenar',
 		'as'=>'categorias.reordenar']
 	);
+
+	/* rutas PAISES */
+	Route::resource('paises','Paises',['except'=>['create','store','destroy','show']]);
+	Route::post('paises/{pais_id}',[
+		'uses' =>'Paises@update',
+		'as'=>'paises.update'
+	]);	
+	/* rutas PROVINCIAS */
+	Route::get('pais/{pais_id}/provincias',[
+		'uses' => 'Provincias@index',
+		'as' => 'provincias.index'
+	]);
+	Route::resource('provincias','Provincias',['except'=>['index','create','store','destroy','show']]);
+	Route::post('provincias/{provincia_id}',[
+		'uses' =>'Provincias@update',
+		'as'=>'provincias.update'
+	]);
 
 });
 

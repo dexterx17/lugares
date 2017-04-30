@@ -27,6 +27,10 @@ class Provincia extends Model
     	return $this->belongsTo('App\Pais');
     }
 
+    public function scopeLugares(){
+        return Lugar::where('id_0',$this->id_0)->where('id_1',$this->id_1);
+    }
+
     /**
      * Provincias de un pais
      * @param [type] $query   [description]

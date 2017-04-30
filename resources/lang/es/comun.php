@@ -7,9 +7,13 @@ return [
     'ingles' => 'Ingles',
     'inicio' => 'Inicio',
     'pais' => 'Pais',
+    'paises' => 'Paises',
     'provincia' => 'Provincia',
+    'provincias' => 'Provincias',
     'parroquia' => 'Parroquia',
+    'parroquias' => 'Parroquias',
     'canton' => 'Cantón',
+    'cantones' => 'Cantones',
     'iniciar_sesion' => 'Iniciar sesión',
     'aun_no_tienes_cuenta' => 'Aun no estas registrado',
     'ya_tienes_cuenta' => 'Ya estas registrado',
@@ -58,6 +62,12 @@ return [
     'descripcion' => 'Descripción',
     'accion_no_se_deshace' => 'Esta acción no se puede deshacer',
     'desplazate_en_mapa' => 'Mueve el circulo del mapa, para encontrar más lugares',
-    'ocultar_visitados' => 'Haz click para :accion los lugares visitados del mapa'
+    'ocultar_visitados' => 'Haz click para :accion los lugares visitados del mapa',
+    'nombre' => 'Nombre',
+    'establece_zoom' => 'Establece el punto central y el zoom que tendrá el mapa de',
+    'zoom' => 'Zoom',
+    'ubicacion' => 'Ubicación',
+    'latitud' => 'Latitud',
+    'longitud' => 'Longitud'
 
 ];
