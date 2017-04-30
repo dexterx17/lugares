@@ -43,7 +43,7 @@
                                             <th>
                                                 {{ trans('comun.activo') }}
 
-                                                <span class="badge"> </span>
+                                                <span class="badge"> {{ $categorias_data->where('activa','1')->count() }}</span>
                                             </th>
                                             <th class="text-right">
                                                 {{ trans('comun.acciones') }}

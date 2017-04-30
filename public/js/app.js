@@ -53,7 +53,7 @@ function renderPlace(place,marker_index) {
     item.find('.media-heading a').html(place.name);
     item.find('img').attr('src',(typeof place.photos !== "undefined")?place.photos[0].getUrl({'maxWidth': 50, 'maxHeight': 50}):place.icon);
     item.find('img').attr('alt',place.name);
-    item.find('.vicinity').html(place.place_id);
+    item.find('.vicinity').html(place.vicinity);
     list.append(item);
     $('#n_lugares').html(n_lugares);
 }
@@ -76,6 +76,9 @@ function movePlace(place_id){
         $(item).hide().appendTo("#explorados").fadeIn('slow');
         $('#n_lugares_explorados').html(parseInt($('#n_lugares_explorados').html())+1);
         $('#n_lugares').html(parseInt($('#n_lugares').html())-1);
+        var index = item.attr('marker-index');
+        markers[index-1].setIcon(visitedIcon());
+        markers[index-1].visited=true;
     }
 }
 
@@ -155,13 +158,26 @@ function onMarkPlace(e){
 }
 
 function onHoverInPlace(){
-    var index = $(this).index();
+    var index = $(this).attr('marker-index');
     markers[index-1].setIcon(highlightedIcon());
 }
 
 function onHoverOutPlace(){
-    var index = $(this).index();
-    markers[index-1].setIcon(normalIcon());
+    var index = $(this).attr('marker-index');
+    if(markers[index-1].visited){
+        markers[index-1].setIcon(visitedIcon());
+    }else{
+        markers[index-1].setIcon(normalIcon());
+    }
+}
+function onToggleMarkers(){
+    showVisited=!showVisited;
+    for (var i = 0; i < markers.length; i++) {
+        var m = markers[i];
+        if (m.visited) {
+            m.setVisible(showVisited);
+        }
+    };
 }
 
 $('#btn_lugares').on('click',function(e){
@@ -220,8 +236,9 @@ function get_info(place_id){
 var map;
 var infoWindow;
 var cicle;
+var showVisited=true;
 var markers = [];
-var radio = 1000;
+var radio = 800;
 function initMap() {
     console.log('initMap');
     var latitud = parseFloat($('.lat').html());
@@ -261,12 +278,12 @@ function initMap() {
             radio=500;
             circle.setRadius(radio);
         }else if((map.getZoom()>=17) && (map.getZoom()<20)){
-            console.log('radio 250');
-            radio=250;
+            console.log('radio 200');
+            radio=200;
             circle.setRadius(radio);
         }else{
-            console.log('radio 125');
-            radio=125;
+            console.log('radio 100');
+            radio=100;
             circle.setRadius(radio);
         }
         buscar_lugares(categorias, radio);
@@ -379,7 +396,7 @@ function buscar_lugares(categoria,radio){
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 updatePeticionesResponses(1);
                 for (var i = 0; i < places.length; i++) {
-                    if(!$('#lugares .media#'+places[i].place_id).length){
+                    if(!($('#lugares .media#'+places[i].place_id).length) && !($('#explorados .media#'+places[i].place_id).length)){
                         items.push({
                             place_id:places[i].place_id,
                             lat: places[i].geometry.location.lat(),
@@ -502,8 +519,10 @@ $( document ).ready(function() {
 
   $( document ).on( 'click', 'button.visitado', onMarkPlace );
 
-  $( document ).on( 'mouseover', '#lugares .media, #visitados .media', onHoverInPlace );
-  $( document ).on( 'mouseleave', '#lugares .media, #visitados .media', onHoverOutPlace );
+  $( document ).on( 'click', '.ocultar-visitados', onToggleMarkers );
+
+  $( document ).on( 'mouseover', '#lugares .media, #explorados .media', onHoverInPlace );
+  $( document ).on( 'mouseleave', '#lugares .media, #explorados .media', onHoverOutPlace );
 
 
  // $( document ).on( 'mousedown', '#canvas', onGameCanvasMousedown );

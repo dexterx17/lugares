@@ -54,8 +54,9 @@ function get_info(place_id){
 var map;
 var infoWindow;
 var cicle;
+var showVisited=true;
 var markers = [];
-var radio = 1000;
+var radio = 800;
 function initMap() {
     console.log('initMap');
     var latitud = parseFloat($('.lat').html());
@@ -213,7 +214,7 @@ function buscar_lugares(categoria,radio){
             if (status === google.maps.places.PlacesServiceStatus.OK) {
                 updatePeticionesResponses(1);
                 for (var i = 0; i < places.length; i++) {
-                    if(!$('#lugares .media#'+places[i].place_id).length){
+                    if(!($('#lugares .media#'+places[i].place_id).length) && !($('#explorados .media#'+places[i].place_id).length)){
                         items.push({
                             place_id:places[i].place_id,
                             lat: places[i].geometry.location.lat(),

@@ -32,7 +32,7 @@ function renderPlace(place,marker_index) {
     item.find('.media-heading a').html(place.name);
     item.find('img').attr('src',(typeof place.photos !== "undefined")?place.photos[0].getUrl({'maxWidth': 50, 'maxHeight': 50}):place.icon);
     item.find('img').attr('alt',place.name);
-    item.find('.vicinity').html(place.place_id);
+    item.find('.vicinity').html(place.vicinity);
     list.append(item);
     $('#n_lugares').html(n_lugares);
 }
@@ -55,6 +55,9 @@ function movePlace(place_id){
         $(item).hide().appendTo("#explorados").fadeIn('slow');
         $('#n_lugares_explorados').html(parseInt($('#n_lugares_explorados').html())+1);
         $('#n_lugares').html(parseInt($('#n_lugares').html())-1);
+        var index = item.attr('marker-index');
+        markers[index-1].setIcon(visitedIcon());
+        markers[index-1].visited=true;
     }
 }
 
@@ -134,11 +137,24 @@ function onMarkPlace(e){
 }
 
 function onHoverInPlace(){
-    var index = $(this).index();
+    var index = $(this).attr('marker-index');
     markers[index-1].setIcon(highlightedIcon());
 }
 
 function onHoverOutPlace(){
-    var index = $(this).index();
-    markers[index-1].setIcon(normalIcon());
+    var index = $(this).attr('marker-index');
+    if(markers[index-1].visited){
+        markers[index-1].setIcon(visitedIcon());
+    }else{
+        markers[index-1].setIcon(normalIcon());
+    }
+}
+function onToggleMarkers(){
+    showVisited=!showVisited;
+    for (var i = 0; i < markers.length; i++) {
+        var m = markers[i];
+        if (m.visited) {
+            m.setVisible(showVisited);
+        }
+    };
 }

@@ -57,6 +57,7 @@ return [
     'activo' => 'Activo',
     'descripcion' => 'Descripción',
     'accion_no_se_deshace' => 'Esta acción no se puede deshacer',
-    'desplazate_en_mapa' => 'Desplazate en el mapa, para encontrar más lugares'
+    'desplazate_en_mapa' => 'Mueve el circulo del mapa, para encontrar más lugares',
+    'ocultar_visitados' => 'Haz click para :accion los lugares visitados del mapa'
 
 ];

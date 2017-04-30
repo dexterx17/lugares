@@ -7,6 +7,12 @@ $error : '#FF0000';
 	height: 500px;
 }
 
+.contenedor-lugares{
+    max-height: 500px;
+    overflow: hidden;
+    overflow-y:auto;
+}
+
 #lugares {
     .media:hover{
         border: 2px dashed black;
@@ -19,6 +25,28 @@ $error : '#FF0000';
     .help{
         text-align: center;
     }
+}
+
+#explorados {
+    .media:hover{
+        border: 2px dashed black;
+    }
+    .loading{
+        text-align: center;   
+        font-size:18px;
+        margin: 5px 0px; 
+    }
+    .ocultar-visitados{
+        text-align: center;
+        padding: 5px 0px;
+        margin: 5px 0px;
+        cursor:pointer;
+        text-decoration:underline;
+    }
+}
+
+.panel-explorar-heading{
+    padding: 0px !important;
 }
 
 #detail img{
@@ -360,4 +388,3 @@ $error : '#FF0000';
     border-color: #f8a12d;
     color: #428aa5;
 }
-

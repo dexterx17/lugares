@@ -6,7 +6,7 @@
     <div id="fb-root"></div>
 
     <div class="panel panel-default">
-        <div class="panel-heading">
+        <div class="panel-heading panel-explorar-heading">
             <div class="page-nav">
                 <div class="page-nav-fixed">
                     <div class="limit">
@@ -75,7 +75,7 @@
 
                       <!-- Tab panes -->
                       <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="lugares" base-url="{{ route('loader') }}" token="{{ Session::token() }}">
+                        <div role="tabpanel" class="tab-pane active contenedor-lugares" id="lugares" base-url="{{ route('loader') }}" token="{{ Session::token() }}">
                             <div class="help">
                                 {{ trans('comun.desplazate_en_mapa') }}
                             </div>
@@ -83,8 +83,10 @@
                         <div role="tabpanel" class="tab-pane" id="detail">
                             Selecciona un <button  id="btn_lugares" title="Lugar">lugar</button>
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="explorados">
-
+                        <div role="tabpanel" class="tab-pane contenedor-lugares" id="explorados">
+                            <div class="ocultar-visitados">
+                                {{ trans('comun.ocultar_visitados',['accion'=>'ocultar']) }}
+                            </div>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="templates">
                             <div class="template-lugar " id="">

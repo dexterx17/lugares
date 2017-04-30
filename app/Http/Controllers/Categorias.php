@@ -10,6 +10,8 @@ use App\Categoria;
 
 class Categorias extends Controller
 {
+    var $datos=[];
+    
 	/**
      * Muestra el listado de elementos
      */
