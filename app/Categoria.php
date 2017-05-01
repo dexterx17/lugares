@@ -26,9 +26,10 @@ class Categoria extends Model
     }
 
     public function scopeOrderByLugares($query){
-        return $query->select('nombre',\DB::raw('COUNT(lugar_id) as puntos'))
+        return $query->select('categoria','nombre',\DB::raw('COUNT(lugar_id) as puntos'))
+            ->orderBy('puntos','DESC')
             ->join('categoria_lugar',function($join){
-            $join->on('categorias.categoria','=', 'categoria_lugar.categoria_id');
-        });
+                $join->on('categorias.categoria','=', 'categoria_lugar.categoria_id');
+            })->groupBy('categoria');
     }
 }

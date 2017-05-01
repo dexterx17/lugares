@@ -44,9 +44,10 @@ class User extends Authenticatable
     }
 
     public function scopeOrderByPoints($query){
-        return $query->select('name',\DB::raw('COUNT(lugar_id) as puntos'))
+        return $query->select('users.id','name',\DB::raw('COUNT(lugar_id) as puntos'))
+            ->orderBy('puntos','DESC')
             ->join('lugar_user',function($join){
             $join->on('users.id','=', 'lugar_user.user_id');
-        });
+        })->groupBy('users.id');
     }
 }
