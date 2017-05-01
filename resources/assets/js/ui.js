@@ -9,6 +9,24 @@ function renderWelcome() {
     welcome.find('.stats .bombs').html(Parse.User.current().get('bombs'));
 }
 
+function addPoints(added_points){
+    var puntos = parseInt($('#user_points').html());
+    $('#user_points').html(puntos+added_points);
+}
+
+function updateItemsBar(incremento){
+    var n_vistados = parseInt($('#n_total_visitados').html())+incremento;
+    var total = parseInt($('#n_lugares_total').html());
+    if(total!=0)
+        total = (n_vistados/total)*100;
+    $('.bar-lugares').animate({
+        width: total+'%'
+    },1000,function(){
+        $('#n_total_visitados').html(n_vistados);
+    });
+
+}
+
 function updatePeticiones(inc){
     $('#n_peticiones').html(parseInt($('#n_peticiones').html())+inc);
 }

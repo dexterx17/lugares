@@ -59,7 +59,7 @@ return [
     'traducciones' => 'Traducciones',
     'slug' => 'Slug',
     'orden' => 'Orden',
-    'no_number' => 'Sin telefono',
+    'no_number' => 'Sin teléfono',
     'no_direction' => 'Sin dirección',
     'estas_seguro' => 'Estas seguro',
     'eliminado' => 'Eliminado',
@@ -79,10 +79,14 @@ return [
     'establece_zoom' => 'Establece el punto central y el zoom que tendrá el mapa de',
     'zoom' => 'Zoom',
     'ubicacion' => 'Ubicación',
-    'estadisticas' => 'Estadisticas',
+    'estadisticas' => 'Estadísticas',
     'latitud' => 'Latitud',
     'longitud' => 'Longitud',
     'proximamente' => 'Proximamente',
-    'explorer' => 'Explorador'
+    'explorer' => 'Explorador',
+    'comentarios' => 'Comentarios',
+    'leaderboard' => 'Tablero de posiciones',
+    'populares' => 'Populares'
+
 
 ];

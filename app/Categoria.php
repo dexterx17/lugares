@@ -24,4 +24,11 @@ class Categoria extends Model
     public function lugares(){
         return $this->belongsToMany('App\Lugar');
     }
+
+    public function scopeOrderByLugares($query){
+        return $query->select('nombre',\DB::raw('COUNT(lugar_id) as puntos'))
+            ->join('categoria_lugar',function($join){
+            $join->on('categorias.categoria','=', 'categoria_lugar.categoria_id');
+        });
+    }
 }

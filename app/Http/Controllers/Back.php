@@ -39,33 +39,52 @@ class Back extends Controller
     {
     	$pais = Pais::find($pais_id);
     	$paises = Pais::orderBy('pais','ASC')->get();
-    	$this->datos['items'] = Lugar::byPais($pais_id)->count();
+
+
     	$this->datos['pais'] = $pais;
     	$this->datos['paises'] = $paises;
         $this->datos['categorias'] = Categoria::where('activa',1)->orderBy('nombre','ASC')->get()->lists('nombre','categoria');
         
+    	$this->datos['items'] = Lugar::byPais($pais_id)->count();
         $this->datos['provincias'] = Provincia::byPais($pais_id)->orderBy('provincia','ASC')->get()->lists('provincia','id_1');
             
+    	$this->datos['items_user'] = Lugar::visitedByPais(Auth::user()->id,$pais->id_0)->count();
         
         return view('inicio',$this->datos);
     }
 
+    public function estadisticas($pais_id=68){
+    	$pais = Pais::find($pais_id);
+    	$paises = Pais::orderBy('pais','ASC')->get();
+    	$users = User::orderByPoints()->get();
+    	$categorias = Categoria::orderByLugares()->get();
+
+    	$this->datos['pais'] = $pais;
+    	$this->datos['paises'] = $paises;
+    	$this->datos['users'] = $users;
+    	$this->datos['categorias'] = $categorias;
+
+    	$this->datos['items'] = Lugar::byPais($pais_id)->count();
+    	$this->datos['items_user'] = Lugar::visitedByPais(Auth::user()->id,$pais->id_0)->count();
+
+        return view('estadisticas',$this->datos);
+    }
+
     public function game_provincia($categoria,$pais,$provincia)
     {
-    	//$lugar = Lugar::find(492);
-    	//dd($lugar->isVisited(Auth::user()->id)->count());
     	$categoria = Categoria::find($categoria);
-    	$provincias = Provincia::where('id_0',$pais)->orderBy('provincia','ASC')->get();
     	$provincia = Provincia::where('id_0',$pais)->where('id_1',$provincia)->first();
 
-
-    	$this->datos['categorias'] = Categoria::where('activa',1)->orderBy('categoria','ASC')->get();
+    	$this->datos['categorias'] = Categoria::where('activa',1)->orderBy('nombre','ASC')->get();
+    	$this->datos['provincias']=Provincia::where('id_0',$pais)->orderBy('provincia','ASC')->get();
+    	
     	$this->datos['categoria']=$categoria;
     	$this->datos['provincia']=$provincia;
 
-    	$this->datos['provincias']=$provincias;
-
         $this->datos['items'] = Lugar::byCategoriaProvincia($categoria->categoria,$provincia)->count();
+
+        $this->datos['items_user'] = Lugar::visitedByCategoriaProvincia(Auth::user()->id,$categoria->categoria,$provincia)->count();
+        
     	return view('explorar',$this->datos);
     }
 

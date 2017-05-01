@@ -19,37 +19,12 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3 col-xs-12 user-stats">
-                <div class="well">
-                    <h5>
-                        <strong>{{ trans('comun.username') }}: </strong> {{ (Auth::guest())? trans('comun.invitado'): Auth::user()->name }} <span class="pull-right label label-info">{{ (Auth::guest())? trans('comun.explorer'): Auth::user()->type }}</span> 
-                    </h5>
-                    <h5>
-                        <strong>{{ trans('comun.nivel') }}: </strong> {{ (Auth::guest())? 0 : Auth::user()->getNivel() }}
-                    </h5>
-                    <h5>
-                        <strong>{{ trans('comun.monedas') }}: </strong>0
-                    </h5>
-                    <h5>
-                        <strong>{{ trans('comun.puntos') }}: </strong> {{ (Auth::guest())? 0 : Auth::user()->getPuntos() }}
-                    </h5>
-                    <hr />
-                    <h5>
-                    @if (Auth::guest())
-                        <a href="{{ url('/login') }}" class="pull-left">{{ trans('comun.iniciar_sesion') }}</a>
-                        <a href="{{ url('/register') }}" class="pull-right">{{ trans('comun.registrate') }}</a>
-                        <div class="clearfix"></div>
-                    @else
-                        <a href="#" class="pull-left">{{ trans('comun.estadisticas') }}</a>
-                        <a href="{{ url('/logout') }}" class="pull-right"><i class="fa fa-btn fa-sign-out"></i>Logout</a>
-                        <div class="clearfix"></div>
-                    @endif
-                    </h5>
-                </div>
+                @include('layouts.user_stats')
             </div>
             <div class="col-md-6 col-xs-12 text-center page-header">
                 <h1 class="game-name">
                     <small>@yield('country')</small>
-                    <a href="{{ url('/') }}" title="{{ trans('comun.app_name') }}">{{ trans('comun.app_name') }}</a>
+                    <a href="@yield('main_url',url('/'))" title="{{ trans('comun.app_name') }}">{{ trans('comun.app_name') }}</a>
                     <small>{{ trans('comun.slogan') }}</small>    
                 </h1>   
             </div>

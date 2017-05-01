@@ -30,6 +30,24 @@ function renderWelcome() {
     welcome.find('.stats .bombs').html(Parse.User.current().get('bombs'));
 }
 
+function addPoints(added_points){
+    var puntos = parseInt($('#user_points').html());
+    $('#user_points').html(puntos+added_points);
+}
+
+function updateItemsBar(incremento){
+    var n_vistados = parseInt($('#n_total_visitados').html())+incremento;
+    var total = parseInt($('#n_lugares_total').html());
+    if(total!=0)
+        total = (n_vistados/total)*100;
+    $('.bar-lugares').animate({
+        width: total+'%'
+    },1000,function(){
+        $('#n_total_visitados').html(n_vistados);
+    });
+
+}
+
 function updatePeticiones(inc){
     $('#n_peticiones').html(parseInt($('#n_peticiones').html())+inc);
 }
@@ -200,18 +218,31 @@ function mark_place(place_id){
       cancelButtonText: "Aun no :)",
       closeOnConfirm: false
     },
-    function(){
-        var token=$('#lugares').attr('token');
-        $.post(url,{'place_id':place_id,_token: token},function(response){
-            if(response.google_id){
-                $('#'+response.google_id).fadeOut('slow');
-                swal("Visitado!", "Genial, +10 puntos", "success");
-                $('#tabs a[href="#explorados"]').tab('show');
-                movePlace(response.google_id);
-            }else{
+    function(isConfirm){
+        if(isConfirm){
+            var token=$('#lugares').attr('token');
+            $.post(url,{'place_id':place_id,_token: token},function(response){
+                if(response.google_id){
+                    $('#'+response.google_id).fadeOut('slow');
+                    swal("Visitado!", "Genial, +10 puntos", "success");
+                    $('#tabs a[href="#explorados"]').tab('show');
+                    movePlace(response.google_id);
+                    addPoints(10);
+                    updateItemsBar(1);
+                }else{
 
-            }
-        },'json');
+                }
+            },'json');
+        }else{
+            console.log('visited');
+            swal({
+                title:"Visitalo!",
+                text: "Invita a tus amigos y visítalo",
+                type: "info",
+                timmer: 2000,
+                confirmButtonText: "OK",
+            });
+        }
     });
 }
 
@@ -271,15 +302,15 @@ function initMap() {
 
     map.addListener('zoom_changed', function() {
         $('.zoom').html(map.getZoom());
-        if(map.getZoom()<15){
+        if(map.getZoom()<13){
             console.log('radio 10000');
             radio=1000;
             circle.setRadius(radio);
-        }else if((map.getZoom()>=15) && (map.getZoom()<17)){
+        }else if((map.getZoom()>=13) && (map.getZoom()<15)){
             console.log('radio 500');
             radio=500;
             circle.setRadius(radio);
-        }else if((map.getZoom()>=17) && (map.getZoom()<20)){
+        }else if((map.getZoom()>=15) && (map.getZoom()<17)){
             console.log('radio 200');
             radio=200;
             circle.setRadius(radio);

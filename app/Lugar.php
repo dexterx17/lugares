@@ -40,20 +40,12 @@ class Lugar extends Model
         });
     }
 
-    public function scopeIsVisitedByCategoriaProvincia($query,$user_id,$categoria_id,$provincia_id){
-        //dd($user_id,$categoria_id,$provincia_id);
-        return $query->where('id_1',$provincia_id)
+    public function scopeVisitedByPais($query,$user_id,$pais_id){
+        return $query->where('id_0',$pais_id)
             ->whereIn('id',function($sq) use ($user_id){
                 $sq->select('lugar_id');
                 $sq->from('lugar_user');
                 $sq->where('user_id',$user_id);
-               // $sq->where('lugar_id',$lugar_id);
-            })
-            ->whereIn('id',function($sq) use ($categoria_id){
-                $sq->select('lugar_id');
-                $sq->from('categoria_lugar');
-                $sq->where('categoria_id',$categoria_id);
-             //   $sq->where('lugar_id',$lugar_id);
             });
     }
 
@@ -77,5 +69,21 @@ class Lugar extends Model
             $q->from('categoria_lugar');
             $q->where('categoria_id',$categoria);
         });
+    }
+
+    public function scopeVisitedByCategoriaProvincia($query,$user_id,$categoria_id,$provincia){
+       // dd($this->id,$user_id,$categoria_id,$provincia->id_0,$provincia->id_1);
+        return $query->where('id_0',$provincia->id_0)
+            ->where('id_1',$provincia->id_1)
+            ->whereIn('id',function($sq) use ($user_id){
+                $sq->select('lugar_id');
+                $sq->from('lugar_user');
+                $sq->where('user_id',$user_id);
+            })
+            ->whereIn('id',function($sq) use ($categoria_id){
+                $sq->select('lugar_id');
+                $sq->from('categoria_lugar');
+                $sq->where('categoria_id',$categoria_id);
+            });
     }
 }

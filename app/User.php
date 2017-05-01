@@ -42,4 +42,11 @@ class User extends Authenticatable
     public function getNivel(){
         return 1;
     }
+
+    public function scopeOrderByPoints($query){
+        return $query->select('name',\DB::raw('COUNT(lugar_id) as puntos'))
+            ->join('lugar_user',function($join){
+            $join->on('users.id','=', 'lugar_user.user_id');
+        });
+    }
 }

@@ -32,14 +32,21 @@ Route::group(['middleware'=>'auth'],function(){
 		'uses'=>'Back@game',
 		'as'=>'game'
 	]);
+	
 	Route::get('/game/{categoria}/{pais}/{provincia}', [
 		'uses'=>'Back@game_provincia',
 		'as'=>'game.provincia'
 	]);
+
 	Route::post('/load',[
 		'uses'=>'Back@store',
 		'as'=>'loader']
 	);
+
+	Route::get('/stats/{pais_id?}', [
+		'uses'=>'Back@estadisticas',
+		'as'=>'stats'
+	]);
 
 	Route::get('/loader/{google_id}','Back@get_item');
 	Route::post('/loader/{google_id}','Back@store_item');

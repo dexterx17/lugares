@@ -5,7 +5,7 @@
 @section('title',$provincia->provincia.' - '.$categoria->nombre)
 
 @section('mini_stats')
-    @include('layouts.mini_stats',['total_lugares'=>$items,'total_categorias'=>$total_categorias])
+    @include('layouts.mini_stats',['total_lugares'=>$items,'total_categorias'=>$total_categorias, 'total_visitados'=>$items_user])
 @endsection
 
 @section('content')
@@ -59,7 +59,7 @@
                         </nav>
                         <nav class="page-nav-subpages" data-icons="false,map-marker,calendar,star,image">
                             <ul>
-                                <li><a class="current" href="#"><span id="n_lugares_total" class="badge">{{ $items }}</span> {{ trans('comun.lugares_total') }}</a></li>
+                                <!--<li><a class="current" href="#"><span id="n_lugares_total" class="badge">{{ $items }}</span> {{ trans('comun.lugares_total') }}</a></li>-->
                             </ul>
                         </nav>
                     </div><!--/limit-->
