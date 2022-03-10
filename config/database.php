@@ -67,12 +67,15 @@ return [
         ],
 
         'pgsql' => [
-            'driver' => 'pgsql',
+            'driver' => 'mysql',
             'host' => env('DB_HOST', 'localhost'),
-            'port' => env('DB_PG_PORT', '5432'),
+            'port' => env('DB_PG_PORT', '3306'),
             'database' => env('DB_PG_DATABASE', 'forge'),
             'username' => env('DB_PG_USERNAME', 'forge'),
             'password' => env('DB_PG_PASSWORD', ''),
+
+            'collation' => 'utf8_unicode_ci',
+
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',

@@ -2,7 +2,7 @@
     <div class="page-nav-fixed">
         <div class="limit">
             <nav class="page-nav-breadcrubms">
-                <div class="page-nav-breadcrumbs-text">{{ trans('comun.estas_en') }}</div>
+                <div class="page-nav-breadcrumbs-text">{{ trans('comun.estas_en') }}h1</div>
                 <ul itemscope="" itemtype="http://schema.org/BreadcrumbList">
                     <li class="current-menu-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
                         <a itemprop="item" href="#">
@@ -12,7 +12,7 @@
                             @foreach($paises as $p)
                                 @if($pais->id!=$p->id)
                                     <li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
-                                        <a itemprop="item" href="{{route('game',$p->id_0)}}">
+                                        <a itemprop="item" href="{{route('game',$p->id)}}">
                                             <span itemprop="name"> {{ $p->pais }}</span>
                                         </a>
                                     </li>

@@ -38,7 +38,8 @@
                                             <th>
                                                 {{ trans('comun.lugares') }}
                                                 <span class="badge">
-                                                    {{ $pais->lugares()->count()}}
+                                                    {{-- {{ dd($pais->lugares()) }} --}}
+                                                    {{-- {{ $pais->lugares()->count()}} --}}
                                                 </span>
                                             </th>
                                             <th>
@@ -64,7 +65,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                {{ $provincia->lugares()->count() }}
+                                                {{-- {{ $provincia->lugares()->count() }} --}}
                                             </td>
                                             <td>
                                                 {{ $provincia->zoom }}

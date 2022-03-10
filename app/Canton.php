@@ -10,14 +10,36 @@ use App\Parroquia;
 
 class Canton extends Model
 {
-    protected $connection = 'pgsql';
+    // protected $connection = 'pgsql';
     
     protected $table = "cantones";
 
     protected $fillable = [
-    	'canton', 'descripcion', 'bandera_url', 'escudo_url',
-    	'zipcode', 'lat', 'lng', 'zoom', 'n_items', 'minx', 'miny',
-    	'maxx','maxy','id_1','id_0','id_2'
+    	'gid0', //pais
+        'gid1', //provincia
+        'gid2', //canton
+        'canton',
+        'slug',
+        'tipo',
+        'engtype',
+        'descripcion',
+        'bandera_url',
+        'escudo_url',
+        'zipcode',
+        'minx',
+        'miny',
+        'maxx',
+        'maxy',
+        'lat',
+        'lng',
+        'zoom',
+        'estado',
+        'pitch',
+        'bearing',
+
+        'n_items',
+        'id_0',
+        'id_1',
     ];
 
     public $timestamps = false;

@@ -60,7 +60,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                {{ $pais->lugares()->count() }}
+                                                {{-- {{ $pais->lugares()->count() }} --}}
                                             </td>
                                             <td>
                                                 {{ $pais->zoom }}

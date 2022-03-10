@@ -7,14 +7,37 @@ use App\Canton;
 
 class Provincia extends Model
 {
-    protected $connection = 'pgsql';
+    // protected $connection = 'pgsql';
     
     protected $table = "provincias";
 
     protected $fillable = [
-    	'provincia', 'descripcion', 'bandera_url', 'escudo_url',
-    	'zipcode', 'lat', 'lng', 'zoom', 'n_items', 'minx', 'miny',
-    	'maxx','maxy','pais_id'
+        'gid0', //pais
+        'gid1', //provincia
+        'provincia',
+        'slug',
+        'tipo',
+        'engtype',
+        'descripcion',
+        'bandera_url',
+        'escudo_url',
+        'zipcode',
+        'minx',
+        'miny',
+        'maxx',
+        'maxy',
+        'lat',
+        'lng',
+        'zoom',
+        'estado',
+        'pitch',
+        'bearing',
+
+  
+        'n_items',
+        'pais_id',
+        'id_0',
+        'id_1',
     ];
 
     public $timestamps = false;

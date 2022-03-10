@@ -8,14 +8,35 @@ use App\Lugar;
 
 class Pais extends Model
 {
-    protected $connection = 'pgsql';
-    
+    // protected $connection = 'pgsql';
     protected $table ="paises";
 
     protected $fillable = [
-        'pais','short_name','continente','descripcion',
-        'bandera_url','escudo_url','zipcode','lat','lng',
-        'zoom','n_items', 'minx', 'miny', 'maxx', 'maxy'
+        'gid0',
+        'pais',
+        'slug',
+        'codigo',
+        'orden',
+        'estado',
+        'minx',
+        'miny',
+        'maxx',
+        'maxy',
+        'lat',
+        'lng',
+        'zoom',
+        'pitch',
+        'bearing',
+
+        'short_name',
+        'continente',
+        'descripcion',
+        'bandera_url',
+        'escudo_url',
+        'zipcode',
+
+        'n_items',
+
     ];
 
     public $timestamps = false;

@@ -128,7 +128,9 @@ function initMap() {
 
     circle.addListener('center_changed', function(e) {
         var bounds =map.getBounds(); 
+        console.log("bounds", bounds);
         var centro =circle.getCenter();
+
         $('.bounds').html(bounds.b.b+' , '+bounds.b.f+'  ::  '+bounds.f.b+' , '+bounds.f.f);
         $('.lat').html(centro.lat());
         $('.lng').html(centro.lng());

@@ -160,6 +160,6 @@
 @endsection
 @section('js')
     <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDJ920_mAj7Lcw2Mc6JOqrxbJEKHQS0BRE&libraries=places&callback=initMap">
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv7ImDvAkjNbjIyJClwa7pzIwTcg3elLo&libraries=places&callback=initMap">
     </script>
 @endsection

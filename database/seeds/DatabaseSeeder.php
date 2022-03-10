@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 
 use App\User;
+use Database\Seeders\Geo\PaisesSeeder;
+use Database\Seeders\GeoSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +21,8 @@ class DatabaseSeeder extends Seeder
             'password'=>bcrypt('12345'),
             'type' => 'superadmin'
         ]);
-        $this->call(CategoriasSeeder::class);
+        $this->call([CategoriasSeeder::class, PaisesSeeder::class]);
+
+     
     }
 }
